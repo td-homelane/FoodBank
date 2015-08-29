@@ -14,6 +14,7 @@ public class Constants {
         public static final String SERVER_TOKEN = "server_token";
         public static final String ACCESS_TOKEN = "access_token";
         public static final String UBER_API_URL = "uber_api_url";
+        public static final String PRODUCT_ID = "product_id";
     }
 
     public static final String URL = "url";
@@ -56,12 +57,20 @@ public class Constants {
 
     }
 
+    public static final class APIParams {
+        public static final String START_LATITUDE = "start_latitude";
+        public static final String START_LONGITUDE = "start_longitude";
+        public static final String END_LATITUDE = "end_latitude";
+        public static final String END_LONGITUDE = "end_longitude";
+        public static final String PRODUCT_ID = "product_id";
+    }
     /////////////////////////////////////////////////
     //////////////////Events////////////////////////
     ///////////////////////////////////////////////
 
     public static final String ON_UPDATE_USER_EVENT ="on_update_user";
     public static final String ON_FORGOT_PWD_EVENT ="on_forgot_password";
+    public static final String ON_LOGOUT_EVENT ="on_logout_event";
 
 
 }
