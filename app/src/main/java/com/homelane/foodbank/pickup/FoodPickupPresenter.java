@@ -380,10 +380,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_logout:
-
                 HLCoreEvent hlEventDispatcher=new HLCoreEvent(Constants.ON_LOGOUT_EVENT,null);
                 dispatchEvent(hlEventDispatcher);
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
