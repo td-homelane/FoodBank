@@ -152,6 +152,7 @@
 
 
         <Button
+            android:id="@+id/bookBtn"
             android:layout_alignParentBottom="true"
             android:text="@string/book_cab"
             android:layout_margin="20dp"

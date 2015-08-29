@@ -16,8 +16,10 @@ import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.orm.HLQuery;
+import com.hl.hlcorelib.utils.HLFragmentUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
+import com.homelane.foodbank.history.TripHistoryPresenter;
 import com.homelane.foodbank.utils.GPSUtils;
 
 import org.json.JSONArray;
@@ -110,7 +112,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             }
         });
 
-        mView.mBookNtn.setOnClickListener(new View.OnClickListener() {
+        mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -120,6 +122,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                     trip.put(Constants.Trip.DISPATCH_LOCATION, destLocation);
                     trip.put(Constants.Trip.STATUS, Constants.NULL);
                     trip.put(Constants.Trip.FARE, Constants.NULL);
+                    trip.put(Constants.Trip.START_TIME, Constants.NULL);
+                    trip.put(Constants.Trip.END_TIME, Constants.NULL);
 
                     try {
                         if (trip.save()) {
@@ -426,6 +430,16 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
 
                 HLCoreEvent hlEventDispatcher=new HLCoreEvent(Constants.ON_LOGOUT_EVENT,null);
                 dispatchEvent(hlEventDispatcher);
+
+                return true;
+            case R.id.menu_history:
+
+                HLFragmentUtils.HLFragmentTransaction transaction =
+                        new HLFragmentUtils.HLFragmentTransaction();
+                transaction.mFrameId = R.id.fragment_frame;
+                transaction.mFragmentClass = TripHistoryPresenter.class;
+                push(transaction);
+
 
                 return true;
             default:

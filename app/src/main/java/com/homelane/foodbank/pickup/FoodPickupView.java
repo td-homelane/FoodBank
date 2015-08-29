@@ -22,7 +22,7 @@ public class FoodPickupView implements HLView {
     TextView mPackedFood, mRawFood;
     RelativeLayout mTypeLayout,mConfirmLayout;
     TextView mSelectedFoodType,mCuurentLocation,mDestinationLocation,mFareEstimate;
-    Button mBookNtn;
+    Button mBookBtn;
 
 
 
@@ -43,6 +43,7 @@ public class FoodPickupView implements HLView {
         mCuurentLocation = (TextView) mView.findViewById(R.id.current_location);
         mDestinationLocation = (TextView) mView.findViewById(R.id.destination_name);
         mFareEstimate = (TextView) mView.findViewById(R.id.fare_estimate);
+        mBookBtn = (Button) mView.findViewById(R.id.bookBtn);
     }
 
     /**
