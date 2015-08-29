@@ -1,6 +1,7 @@
 package com.homelane.foodbank;
 
 import com.hl.hlcorelib.HLApplication;
+import com.hl.hlcorelib.HLCoreLib;
 
 /**
  * Created by hl0204 on 29/8/15.
@@ -19,6 +20,6 @@ public class FoodBank extends HLApplication{
     @Override
     public void onCreate() {
         super.onCreate();
-
+        HLCoreLib.initAppConfig(false);
     }
 }
