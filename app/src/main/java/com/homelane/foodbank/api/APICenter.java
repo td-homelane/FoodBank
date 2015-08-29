@@ -11,11 +11,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.hl.hlcorelib.HLCoreLib;
 import com.hl.hlcorelib.orm.HLObject;
+import com.hl.hlcorelib.orm.HLQuery;
 import com.homelane.foodbank.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +35,9 @@ public final class APICenter {
     public static interface  APIInterface{
         /**
          * function which will be called on error
+         * @param e the exception thrown
          */
-        public void onError();
+        public void onError(Exception e);
 
         /**
          * delegate method which will be called on completion of the request
@@ -42,6 +45,13 @@ public final class APICenter {
          * @param results the result obtained from the server
          */
         public void onResult(List<HLObject> results);
+
+        /**
+         * delegate method which will be called on completion of the request
+         *
+         * @param object the result obtained from the server
+         */
+        public void onResult(HLObject object);
     }
 
     /**
@@ -77,7 +87,10 @@ public final class APICenter {
      */
     public static final void getTripStatus(final HLObject mTrip,
                                            final APIInterface callback){
-        String uberAPIUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL);
+        final String uberAPIUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
+                "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID);
+        
+
 
     }
 
@@ -90,36 +103,63 @@ public final class APICenter {
      */
     public static final void requestPickUp(final HLObject mTrip,
                                            final APIInterface callback) {
-        String url = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL);
-        String requestPickupUrl = url + "/v1/requests";
+        final String requestPickupUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL)
+                + "/v1/requests";
 
         try {
+            JSONObject params = new JSONObject();
 
-            JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.POST,
-                    requestPickupUrl,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d("Response", response.toString());
+            String productId = HLCoreLib.readProperty(Constants.AppConfig.PRODUCT_ID);
+            params.put(Constants.APIParams.START_LATITUDE, "12.967061");
+            params.put(Constants.APIParams.START_LONGITUDE, "77.595482");
+            params.put(Constants.APIParams.END_LATITUDE, "12.908376");
+            params.put(Constants.APIParams.END_LONGITUDE, "77.647506");
+            params.put(Constants.APIParams.PRODUCT_ID, productId);
+
+            JsonObjectRequest request = new JsonObjectRequest(requestPickupUrl, params, new Response.Listener<JSONObject>() {
+                /**
+                 * Called when a response is received.
+                 *
+                 * @param response
+                 */
+                @Override
+                public void onResponse(JSONObject response) {
+                    mRequestQueue.cancelAll(requestPickupUrl);
+                    try {
+                        if (response != null && response.optString("request_id") != null) {
+                            mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
+                            if(response.optString("status") != null){
+                                mTrip.put(Constants.Trip.STATUS, response.getString("status"));
+                            }
+                            mTrip.save();
+                            callback.onResult(mTrip);
                         }
-                    }, new Response.ErrorListener() {
+                    }catch (JSONException e){
+                        callback.onError(e);
+                    }catch (HLQuery.HLQueryException e){
+                        callback.onError(e);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                /**
+                 * Callback method that an error has been occurred with the
+                 * provided error code and optional user-readable message.
+                 *
+                 * @param error
+                 */
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("Error", error.getMessage());
+                    mRequestQueue.cancelAll(requestPickupUrl);
+                    callback.onError(error);
                 }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    String productId = HLCoreLib.readProperty(Constants.AppConfig.PRODUCT_ID);
-                    params.put(Constants.APIParams.START_LATITUDE, "12.967061");
-                    params.put(Constants.APIParams.START_LONGITUDE, "77.595482");
-                    params.put(Constants.APIParams.END_LATITUDE, "12.908376");
-                    params.put(Constants.APIParams.END_LONGITUDE, "77.647506");
-                    params.put(Constants.APIParams.PRODUCT_ID, productId);
-                    return params;
-                }
-
+            }){
+                /**
+                 * Returns a list of extra HTTP headers to go along with this request. Can
+                 * throw {@link AuthFailureError} as authentication may be required to
+                 * provide these values.
+                 *
+                 * @throws AuthFailureError In the event of auth failure
+                 */
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
@@ -129,10 +169,11 @@ public final class APICenter {
                     return headers;
                 }
             };
-            mRequestQueue.add(requestPickUpObject);
+            request.setTag(requestPickupUrl);
+            mRequestQueue.add(request);
+        }catch (JSONException e){
+            callback.onError(e);
         }
-    }catch(JSONException e){
-
     }
 
 

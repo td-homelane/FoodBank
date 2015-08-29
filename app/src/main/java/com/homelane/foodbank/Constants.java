@@ -57,6 +57,13 @@ public class Constants {
 
     }
 
+    public static final class TripStatus{
+        public static final String PROCESSING = "processing";
+        public static final String COMPLETED = "completed";
+        public static final String ACCEPTED = "acceted";
+
+    }
+
     public static final class APIParams {
         public static final String START_LATITUDE = "start_latitude";
         public static final String START_LONGITUDE = "start_longitude";
