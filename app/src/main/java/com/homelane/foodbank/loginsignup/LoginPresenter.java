@@ -74,6 +74,8 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
                 forgotPasswordDialog.show(getChildFragmentManager(),ForgotPasswordDialog.class.getName());
             }
         });
+
+
     }
 
     /**
@@ -128,14 +130,10 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
 
             removeEventListener(Constants.ON_UPDATE_USER_EVENT, this);
 
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.URL,"https://www.google.co.in/maps/");
-
             HLFragmentUtils.HLFragmentTransaction transaction =
                     new HLFragmentUtils.HLFragmentTransaction();
             transaction.mFrameId = R.id.fragment_frame;
             transaction.mFragmentClass = FoodPickupPresenter.class;
-            transaction.mParameters = bundle;
             push(transaction);
 
         }else if(coreEvent.getType().equals(Constants.ON_FORGOT_PWD_EVENT)){

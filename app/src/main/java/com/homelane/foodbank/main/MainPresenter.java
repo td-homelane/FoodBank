@@ -3,12 +3,17 @@ package com.homelane.foodbank.main;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.hl.hlcorelib.mvp.events.HLCoreEvent;
+import com.hl.hlcorelib.mvp.events.HLEvent;
+import com.hl.hlcorelib.mvp.events.HLEventListener;
 import com.hl.hlcorelib.mvp.presenters.HLCoreActivityPresenter;
 import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.utils.HLFragmentUtils;
+import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.api.APICenter;
 import com.homelane.foodbank.loginsignup.LoginPresenter;
@@ -18,7 +23,7 @@ import java.util.List;
 /**
  * Created by hl0395 on 29/8/15.
  */
-public class MainPresenter extends HLCoreActivityPresenter<MainView> {
+public class MainPresenter extends HLCoreActivityPresenter<MainView> implements HLEventListener{
 
     /**
      * RequestQueue for volley
@@ -76,6 +81,9 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> {
 
         transaction.mFragmentClass = LoginPresenter.class;
         push(transaction);
+
+        if(! hasEventListener(Constants.ON_LOGOUT_EVENT, this))
+            addEventListener(Constants.ON_LOGOUT_EVENT, this);
     }
 
     /**
@@ -85,21 +93,28 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> {
     @Override
     protected void onDestroyHLView() {
         super.onDestroyHLView();
+        removeEventListener(Constants.ON_LOGOUT_EVENT,this);
     }
 
 
+    /**
+     * Delegate method which will be called against respective events
+     *
+     * @param event the event which is dispatched by the {@link HLDispatcher}
+     */
+    @Override
+    public void onEvent(HLEvent event) {
+        HLCoreEvent e = (HLCoreEvent)event;
+        Bundle bundle = e.getmExtra();
 
-    /*
-     * Function to check for internet connectivity of the mobile
-     * @return the status of internet connection
-    */
-    public boolean isConnectedToNetwork() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        if(e.getType().equals(Constants.ON_LOGOUT_EVENT)) {
+            HLFragmentUtils.HLFragmentTransaction transaction =
+                    new HLFragmentUtils.HLFragmentTransaction();
+            transaction.isRoot = true;
+            transaction.mFrameId = R.id.fragment_frame;
+
+            transaction.mFragmentClass = LoginPresenter.class;
+            push(transaction);
+        }
     }
-
-
-
 }

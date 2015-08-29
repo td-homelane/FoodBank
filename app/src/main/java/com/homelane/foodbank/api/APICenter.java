@@ -58,7 +58,7 @@ public final class APICenter {
      * function which get the collection center arounwhich is close to the user
      *
      * @param radius the limit in which the collection centers to be picked
-     * @param location the localtion of the user
+     * @param location the location of the user
      * @param callback the delegate call back to be called on success or error
      *                 of the request
      */
@@ -175,6 +175,5 @@ public final class APICenter {
             callback.onError(e);
         }
     }
-
 
 }

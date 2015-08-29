@@ -77,6 +77,7 @@ public class Constants {
 
     public static final String ON_UPDATE_USER_EVENT ="on_update_user";
     public static final String ON_FORGOT_PWD_EVENT ="on_forgot_password";
+    public static final String ON_LOGOUT_EVENT ="on_logout_event";
 
 
 }

@@ -30,10 +30,19 @@
     <string name="food_name">Food name/type</string>
     <string name="quantity_txt">Quantity</string>
     <string name="person">Persons</string>
-    <string name="current_location">Click here to get the current location</string>
+    <string name="current_location">Current location</string>
     <string name="pickup_txt">Pickup</string>
     <string name="destination_txt">Destination</string>
+    <string name="fare_estimate">Estiamted Fare</string>
     <string name="book_cab">Book</string>
+    <string name="selected_type">Selected food type</string>
+    <string name="raw_materials">Raw materials</string>
+    <string name="packed_txt">Packed</string>
+    <string name="food_type_share">What type of food do you wish to share ?</string>
+    <string name="address_output_string">%1$s %2$s %3$s</string>
+    <string name="no_address_found">No address found for location</string>
 
+    <string name="menu_logout">Logout</string>
+    <string name="menu_history">History</string>
 
 </resources>
