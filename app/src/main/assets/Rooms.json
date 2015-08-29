@@ -1,0 +1,14 @@
+{"Rooms":[{"id":1,"name":"Kitchen","displayName":"Kitchen","hasSubRooms":"true","hasWalls":"true"},
+  {"id":2,"name":"Bedroom","displayName":"Bedroom","hasSubRooms":"true","hasWalls":"true"},
+  {"id":3,"name":"Living","displayName":"Living","hasSubRooms":"false","hasWalls":"true"},
+  {"id":4,"name":"Dining","displayName":"Dining","hasSubRooms":"false","hasWalls":"false"},
+  {"id":5,"name":"Study Room","displayName":"Study Room","hasSubRooms":"false","hasWalls":"true"},
+  {"id":6,"name":"Family Room","displayName":"Family Room","hasSubRooms":"false","hasWalls":"true"},
+  {"id":7,"name":"Foyer","displayName":"Foyer/Entrance","hasSubRooms":"false","hasWalls":"false"},
+  {"id":8,"name":"Servants Room","displayName":"Servants Room","hasSubRooms":"false","hasWalls":"false"},
+  {"id":9,"name":"Store Room","displayName":"Store Room","hasSubRooms":"false","hasWalls":"true"},
+  {"id":10,"name":"Utility","displayName":"Utility","hasSubRooms":"false","hasWalls":"false"},
+  {"id":11,"name":"Under Stair Unit","displayName":"Under Stair Unit","hasSubRooms":"false","hasWalls":"false"},
+  {"id":12,"name":"Bathrooms","displayName":"Bathrooms","hasSubRooms":"true","hasWalls":"true"},
+  {"id":13,"name":"Pooja","displayName":"Pooja","hasSubRooms":"false","hasWalls":"true"}
+]}
