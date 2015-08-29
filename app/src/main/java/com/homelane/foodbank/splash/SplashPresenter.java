@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.hl.hlcorelib.HLCoreLib;
 import com.hl.hlcorelib.mvp.presenters.HLCoreActivityPresenter;
+import com.hl.hlcorelib.orm.HLConstants;
+import com.hl.hlcorelib.orm.HLUser;
+import com.hl.hlcorelib.utils.HLPreferenceUtils;
 import com.homelane.foodbank.main.MainPresenter;
 import com.homelane.foodbank.splash.util.SystemUiHider;
 
@@ -44,6 +48,19 @@ public class SplashPresenter extends HLCoreActivityPresenter<SplashView> {
         mSystemUiHider = SystemUiHider.getInstance(this, mView.getView(), HIDER_FLAGS);
         mSystemUiHider.setup();
         final Handler launcherHandler = new Handler();
+
+        String userID = HLPreferenceUtils.obtain().getString(HLConstants._ID);
+        final Intent mainIntent = new Intent(SplashPresenter.this, MainPresenter.class);
+
+        if(userID != null){
+            HLUser hlUser=new HLUser();
+            hlUser.setmObjectId(userID);
+            hlUser.fetch();
+            HLCoreLib.setmUser(hlUser);
+            mainIntent.putExtra("isExist",true);
+        }else
+            mainIntent.putExtra("isExist",false);
+
         launcherHandler.postDelayed(new Runnable() {
             /**
              * Starts executing the active part of the class' code. This method is
@@ -53,7 +70,6 @@ public class SplashPresenter extends HLCoreActivityPresenter<SplashView> {
             @Override
             public void run() {
                 launcherHandler.removeCallbacks(this);
-                Intent mainIntent = new Intent(SplashPresenter.this, MainPresenter.class);
                 finish();
                 startActivity(mainIntent);
             }

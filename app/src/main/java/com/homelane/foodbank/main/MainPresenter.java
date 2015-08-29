@@ -4,25 +4,28 @@ import android.os.Bundle;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.hl.hlcorelib.HLCoreLib;
+import com.hl.hlcorelib.HLLoaderInterface;
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.events.HLEvent;
 import com.hl.hlcorelib.mvp.events.HLEventListener;
 import com.hl.hlcorelib.mvp.presenters.HLCoreActivityPresenter;
+import com.hl.hlcorelib.orm.HLConstants;
+import com.hl.hlcorelib.orm.HLObject;
+import com.hl.hlcorelib.orm.HLQuery;
+import com.hl.hlcorelib.orm.HLUser;
 import com.hl.hlcorelib.utils.HLFragmentUtils;
+import com.hl.hlcorelib.utils.HLPreferenceUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.loginsignup.LoginPresenter;
 
+import java.util.List;
+
 /**
  * Created by hl0395 on 29/8/15.
  */
-public class MainPresenter extends HLCoreActivityPresenter<MainView> implements HLEventListener{
-
-    /**
-     * RequestQueue for volley
-     */
-
-    RequestQueue queue;
+public class MainPresenter extends HLCoreActivityPresenter<MainView> implements HLEventListener {
 
     /**
      * Function which return the enclosing view class, this will be used to
@@ -42,14 +45,13 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
     @Override
     protected void onBindView() {
         super.onBindView();
-        // Instantiate the RequestQueue.
-        queue = Volley.newRequestQueue(this);
         if(!isRecreated()) {
 
             HLFragmentUtils.HLFragmentTransaction transaction =
                     new HLFragmentUtils.HLFragmentTransaction();
             transaction.isRoot = true;
             transaction.mFrameId = R.id.fragment_frame;
+
 
             transaction.mFragmentClass = LoginPresenter.class;
             push(transaction);

@@ -5,7 +5,9 @@ import android.view.View;
 
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
+import com.hl.hlcorelib.orm.HLConstants;
 import com.hl.hlcorelib.orm.HLUser;
+import com.hl.hlcorelib.utils.HLPreferenceUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 
@@ -45,6 +47,7 @@ public class SignupPresenter extends HLCoreFragment<SignupView> {
                         boolean result = user.signUp(mView.mEmail.getText().toString(),
                                 mView.mPassword.getText().toString());
                         if(result){
+                            HLPreferenceUtils.obtain().put(HLConstants._ID,user.getmObjectId());
                             pop();
                             HLCoreEvent event = new HLCoreEvent(Constants.ON_UPDATE_USER_EVENT,null);
                             dispatchEvent(event);

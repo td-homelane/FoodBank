@@ -26,13 +26,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <com.homelane.homelanegauge.views.HLProgressView
-            android:layout_centerInParent="true"
-            android:id="@+id/progress_view"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/history_list"
             android:scrollbars="vertical"
