@@ -1,11 +1,10 @@
 package com.homelane.foodbank.pickup;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,7 +17,6 @@ import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
-import com.homelane.foodbank.loginsignup.LoginView;
 import com.homelane.foodbank.utils.GPSUtils;
 
 import org.json.JSONArray;

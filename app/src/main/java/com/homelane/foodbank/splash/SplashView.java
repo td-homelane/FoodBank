@@ -1,16 +1,13 @@
 package com.homelane.foodbank.splash;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hl.hlcorelib.mvp.HLView;
-import com.hl.hlcorelib.mvp.presenters.HLCoreActivityPresenter;
 import com.homelane.foodbank.R;
 
 /**
