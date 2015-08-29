@@ -17,6 +17,7 @@ import com.hl.hlcorelib.utils.HLFragmentUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.loginsignup.forgotpassword.ForgotPasswordDialog;
+import com.homelane.foodbank.pickup.FoodPickupPresenter;
 
 import java.util.List;
 
@@ -73,6 +74,8 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
                 forgotPasswordDialog.show(getChildFragmentManager(),ForgotPasswordDialog.class.getName());
             }
         });
+
+
     }
 
     /**
@@ -127,15 +130,11 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
 
             removeEventListener(Constants.ON_UPDATE_USER_EVENT, this);
 
-//            Bundle bundle = new Bundle();
-//            bundle.putString(Constants.URL,"https://www.google.co.in/maps/");
-//
-//            HLFragmentUtils.HLFragmentTransaction transaction =
-//                    new HLFragmentUtils.HLFragmentTransaction();
-//            transaction.mFrameId = R.id.fragment_frame;
-//            transaction.mFragmentClass = TripStatusPresenter.class;
-//            transaction.mParameters = bundle;
-//            push(transaction);
+            HLFragmentUtils.HLFragmentTransaction transaction =
+                    new HLFragmentUtils.HLFragmentTransaction();
+            transaction.mFrameId = R.id.fragment_frame;
+            transaction.mFragmentClass = FoodPickupPresenter.class;
+            push(transaction);
 
         }else if(coreEvent.getType().equals(Constants.ON_FORGOT_PWD_EVENT)){
 

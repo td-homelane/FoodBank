@@ -6,10 +6,9 @@
       "contactNo":"8041320797",
       "latitude":"12.980537",
       "longitude":"77.5791132",
-      "catgories":{
-        "processedFood":"true",
-        "rawMaterials":"true"
-      }
+      "processedFood":"true",
+      "rawMaterials":"true"
+
     },
     {"name":"Smile Foundation",
       "Address":"22, Near-M G Road, Museum Road, Bengaluru, Karnataka 560001",
@@ -17,10 +16,8 @@
       "contactNo":"08025587157",
       "latitude":"12.9764517",
       "longitude":"77.5596433",
-      "catgories":{
-        "processedFood":"true",
-        "rawMaterials":"false"
-      }
+      "processedFood":"true",
+      "rawMaterials":"false"
     },
     {"name":"Little Sisters Home for Aged",
       "Address":"Hosur Rd, Richmond Town, Bengaluru, Karnataka 560025",
@@ -28,10 +25,8 @@
       "contactNo":"09448244695",
       "latitude":"12.9599857",
       "longitude":"77.5596433",
-      "catgories":{
-        "processedFood":"false",
-        "rawMaterials":"true"
-      }
+      "processedFood":"false",
+      "rawMaterials":"true"
     }
   ]
 }
