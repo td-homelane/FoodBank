@@ -60,7 +60,6 @@ public final class APICenter {
      */
     public static final void getCollectionCenters(final int radius,
                                             HLObject location, final APIInterface callback){
-
     }
 
 

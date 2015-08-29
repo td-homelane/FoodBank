@@ -44,15 +44,16 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
         super.onBindView();
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(this);
+        if(!isRecreated()) {
 
-        HLFragmentUtils.HLFragmentTransaction transaction =
-                new HLFragmentUtils.HLFragmentTransaction();
-        transaction.isRoot = true;
-        transaction.mFrameId = R.id.fragment_frame;
+            HLFragmentUtils.HLFragmentTransaction transaction =
+                    new HLFragmentUtils.HLFragmentTransaction();
+            transaction.isRoot = true;
+            transaction.mFrameId = R.id.fragment_frame;
 
-        transaction.mFragmentClass = LoginPresenter.class;
-        push(transaction);
-
+            transaction.mFragmentClass = LoginPresenter.class;
+            push(transaction);
+        }
         if(! hasEventListener(Constants.ON_LOGOUT_EVENT, this))
             addEventListener(Constants.ON_LOGOUT_EVENT, this);
     }
@@ -66,7 +67,6 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
         super.onDestroyHLView();
         removeEventListener(Constants.ON_LOGOUT_EVENT, this);
     }
-
 
     /**
      * Delegate method which will be called against respective events
