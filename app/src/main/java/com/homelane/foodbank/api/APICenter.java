@@ -48,7 +48,7 @@ public final class APICenter {
      * function which get the collection center arounwhich is close to the user
      *
      * @param radius the limit in which the collection centers to be picked
-     * @param location the localtion of the user
+     * @param location the location of the user
      * @param callback the delegate call back to be called on success or error
      *                 of the request
      */
@@ -92,22 +92,21 @@ public final class APICenter {
                                            final APIInterface callback) {
         String url = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL);
         String requestPickupUrl = url + "/v1/requests";
-
-        try {
-
-            JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.POST,
+        JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.POST,
                     requestPickupUrl,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d("Response", response.toString());
-                        }
-                    }, new Response.ErrorListener() {
+            new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Response", response.toString());
+            }
+        }, new Response.ErrorListener() {
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.d("Error", error.getMessage());
                 }
-            }) {
+        }) {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
@@ -130,10 +129,6 @@ public final class APICenter {
                 }
             };
             mRequestQueue.add(requestPickUpObject);
-        }
-    }catch(JSONException e){
-
     }
-
 
 }
