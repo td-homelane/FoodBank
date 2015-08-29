@@ -20,6 +20,6 @@ public class FoodBank extends HLApplication{
     @Override
     public void onCreate() {
         super.onCreate();
-        HLCoreLib.initAppConfig(false);
+        HLCoreLib.initAppConfig(true);
     }
 }

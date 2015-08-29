@@ -11,10 +11,14 @@ import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.events.HLEvent;
 import com.hl.hlcorelib.mvp.events.HLEventListener;
 import com.hl.hlcorelib.mvp.presenters.HLCoreActivityPresenter;
+import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.utils.HLFragmentUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
+import com.homelane.foodbank.api.APICenter;
 import com.homelane.foodbank.loginsignup.LoginPresenter;
+
+import java.util.List;
 
 /**
  * Created by hl0395 on 29/8/15.
@@ -46,6 +50,27 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
     protected void onBindView() {
         super.onBindView();
 
+
+        APICenter.requestPickUp(null, new APICenter.APIInterface(){
+            /**
+             * function which will be called on error
+             */
+            @Override
+            public void onError() {
+
+            }
+
+            /**
+             * delegate method which will be called on completion of the request
+             *
+             * @param results the result obtained from the server
+             */
+            @Override
+            public void onResult(List<HLObject> results) {
+
+            }
+        });
+
         // Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(this);
 
@@ -53,6 +78,7 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
                 new HLFragmentUtils.HLFragmentTransaction();
         transaction.isRoot = true;
         transaction.mFrameId = R.id.fragment_frame;
+
         transaction.mFragmentClass = LoginPresenter.class;
         push(transaction);
 
