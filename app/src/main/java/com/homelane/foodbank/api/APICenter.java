@@ -13,6 +13,7 @@ import com.hl.hlcorelib.HLCoreLib;
 import com.hl.hlcorelib.orm.HLObject;
 import com.homelane.foodbank.Constants;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -88,21 +89,25 @@ public final class APICenter {
      *                 of the request
      */
     public static final void requestPickUp(final HLObject mTrip,
-                                           final APIInterface callback){
+                                           final APIInterface callback) {
         String url = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL);
         String requestPickupUrl = url + "/v1/requests";
-        JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.GET, requestPickupUrl,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Response", response.toString());
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error", error.getMessage());
-                    }
-                }) {
+
+        try {
+
+            JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.POST,
+                    requestPickupUrl,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Response", response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Error", error.getMessage());
+                }
+            }) {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<String, String>();
@@ -114,16 +119,20 @@ public final class APICenter {
                     params.put(Constants.APIParams.PRODUCT_ID, productId);
                     return params;
                 }
+
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
                     String accessToken = HLCoreLib.readProperty(Constants.AppConfig.ACCESS_TOKEN);
                     headers.put("Content-Type", "application/json");
-                    headers.put("Authorization", "Bearer "+accessToken);
+                    headers.put("Authorization", "Bearer " + accessToken);
                     return headers;
                 }
-        };
-        mRequestQueue.add(requestPickUpObject);
+            };
+            mRequestQueue.add(requestPickUpObject);
+        }
+    }catch(JSONException e){
+
     }
 
 

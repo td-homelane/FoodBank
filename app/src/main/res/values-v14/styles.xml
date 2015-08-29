@@ -8,10 +8,10 @@
     </style>
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
 
-        <item name="background">@drawable/actionbarcolour</item>
+        <!--<item name="background">@drawable/actionbarcolour</item>-->
 
-        <item name="android:icon">@drawable/logo</item>
-        <item name="icon">@drawable/logo</item>
+        <!--<item name="android:icon">@drawable/logo</item>-->
+        <!--<item name="icon">@drawable/logo</item>-->
         <item name="title"></item>
         <item name="android:title"></item>
         <item name="android:displayOptions">showHome</item>
@@ -20,7 +20,7 @@
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
     <style name="OverFlow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@mipmap/ic_more_vert_black</item>
+        <!--<item name="android:src">@mipmap/ic_more_vert_black</item>-->
     </style>
 
     <style name="FullscreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
