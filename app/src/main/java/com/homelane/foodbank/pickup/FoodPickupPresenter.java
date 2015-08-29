@@ -333,7 +333,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             @Override
             protected void onPostExecute(String s) {
                 str = s;
-                mView.mCuurentLocation.setText(s);
+                if(mView.mCuurentLocation != null)
+                    mView.mCuurentLocation.setText(s);
             }
         }.execute(Latitude, longitude);
         return "Loading address";
