@@ -3,4 +3,37 @@
 
     <string name="db_name">FoodBank</string>
     <integer name="db_version">1</integer>
+
+    <!-- Login -->
+
+    <string name="signin_txt">SIGN IN</string>
+    <string name="username_txt">Username</string>
+    <string name="email_txt">Email address</string>
+    <string name="password_txt">Password</string>
+    <string name="phone_number_txt">Mobile Number</string>
+    <string name="sign_up_txt">Need an account? <u>Sign Up</u></string>
+    <string name="forgot_pwd_txt">Forgotten your password <u>Reset?</u></string>
+
+    <!-- Signup -->
+
+    <string name="first_name_txt">First Name</string>
+    <string name="last_name_txt">First Name</string>
+    <string name="verify_txt">Verify</string>
+    <string name="signup_failed_msg">Signup failed please try again</string>
+
+    <!-- Forgot Password -->
+    <string name="forgot_password">Forgot Password</string>
+    <string name="send_password">Send Password</string>
+    <string name="pincode_msg_format"> Greetings from FoodBank. Please note the password for the FoodBank app is </string>
+
+    <!-- Give Away Food -->
+    <string name="food_name">Food name/type</string>
+    <string name="quantity_txt">Quantity</string>
+    <string name="person">Persons</string>
+    <string name="current_location">Click here to get the current location</string>
+    <string name="pickup_txt">Pickup</string>
+    <string name="destination_txt">Destination</string>
+    <string name="book_cab">Book</string>
+
+
 </resources>
