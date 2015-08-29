@@ -1,6 +1,7 @@
 package com.homelane.foodbank.api;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -85,7 +86,7 @@ public final class APICenter {
         final String requestReceiptUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
                 "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID) + "/receipt";
         try {
-            JsonObjectRequest request = new JsonObjectRequest(requestReceiptUrl, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestReceiptUrl, new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -238,7 +239,7 @@ public final class APICenter {
         final String requestMapUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
                 "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID) + "/map";
         try {
-            JsonObjectRequest request = new JsonObjectRequest(requestMapUrl, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestMapUrl, new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -250,8 +251,8 @@ public final class APICenter {
                     try {
                         if (response != null && response.optString("request_id") != null) {
                             mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
-                            if(response.optString("status") != null){
-                                mTrip.put(Constants.Trip.STATUS, response.getString("status"));
+                            if(response.optString("href") != null){
+                                mTrip.put(Constants.Trip.MAP_LINK, response.getString("href"));
                             }
                             mTrip.save();
                             callback.onResult(mTrip);
@@ -312,7 +313,7 @@ public final class APICenter {
                 "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID);
 
         try {
-            JsonObjectRequest request = new JsonObjectRequest(requestStatusUrl, null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestStatusUrl, new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
