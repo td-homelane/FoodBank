@@ -155,7 +155,7 @@ public final class APICenter {
     public static final void getRequestEstimate(final HLObject mTrip,
                                            final APIInterface callback){
         final String tripEstimateUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
-                "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID) + "/estimate";
+                "/v1/requests/estimate";
         try {
             JSONObject params = new JSONObject();
 
