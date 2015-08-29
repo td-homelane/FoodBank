@@ -13,7 +13,6 @@ import com.hl.hlcorelib.HLCoreLib;
 import com.hl.hlcorelib.orm.HLObject;
 import com.homelane.foodbank.Constants;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -93,7 +92,6 @@ public final class APICenter {
         String url = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL);
         String requestPickupUrl = url + "/v1/requests";
 
-        try {
 
             JsonObjectRequest requestPickUpObject = new JsonObjectRequest(Request.Method.POST,
                     requestPickupUrl,
@@ -130,10 +128,8 @@ public final class APICenter {
                 }
             };
             mRequestQueue.add(requestPickUpObject);
-        }
-    }catch(JSONException e){
+
 
     }
-
 
 }

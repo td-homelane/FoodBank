@@ -1,8 +1,5 @@
 package com.homelane.foodbank.main;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.android.volley.RequestQueue;

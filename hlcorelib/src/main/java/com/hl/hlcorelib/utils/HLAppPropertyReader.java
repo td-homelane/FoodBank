@@ -21,7 +21,6 @@
 package com.hl.hlcorelib.utils;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
