@@ -1,16 +1,23 @@
 package com.homelane.foodbank.pickup;
 
 import android.app.Fragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.homelane.foodbank.loginsignup.LoginView;
+import com.homelane.foodbank.utils.GPSUtils;
 
 /**
  * Created by hl0395 on 29/8/15.
  */
 public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
+
+    /**
+     * Holds the instance to the locaton tracker
+     */
+    private GPSUtils mGPSTracker;
 
     /**
      * Function which return the enclosing view class, this will be used to
@@ -30,6 +37,14 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     @Override
     protected void onBindView() {
         super.onBindView();
+        mGPSTracker = new GPSUtils(getActivity());
+        if(mGPSTracker.canGetLocation()){
+            Location loc = mGPSTracker.getLocation();
+            mGPSTracker.stopUsingGPS();
+            mGPSTracker = null;
+        }else{
+            mGPSTracker.showSettingsAlert();
+        }
     }
 
     /**
@@ -59,6 +74,10 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     @Override
     protected void onDestroyHLView() {
         super.onDestroyHLView();
+        if(mGPSTracker != null){
+            mGPSTracker.stopUsingGPS();
+            mGPSTracker = null;
+        }
     }
 
     /**
