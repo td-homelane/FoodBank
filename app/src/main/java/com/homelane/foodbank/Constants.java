@@ -30,8 +30,7 @@ public class Constants {
     public static final class Food{
         public static final String  FOOD = "food";
         public static final String  FOOD_ID = "food_id";
-        public static final String  NAME = "name";
-        public static final String  QUANTITY = "quantity";
+        public static final String  CATEGORY = "category";
     }
 
     public static final class CollectionCenters {
@@ -52,6 +51,7 @@ public class Constants {
         public static final String PICKUP_LOCATION = "pickup_location";
         public static final String DISPATCH_LOCATION = "dispatch_location";
         public static final String STATUS = "status";
+        public static final String FARE = "fare";
         public static final String START_TIME = "start_time";
         public static final String END_TIME = "end_time";
 

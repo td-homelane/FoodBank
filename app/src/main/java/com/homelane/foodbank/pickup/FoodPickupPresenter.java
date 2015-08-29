@@ -15,6 +15,7 @@ import android.view.View;
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
+import com.hl.hlcorelib.orm.HLQuery;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.utils.GPSUtils;
@@ -45,6 +46,16 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     private GPSUtils mGPSTracker;
 
     /**
+     *  Holds the value of destination location
+     */
+    String destLocation;
+
+    /**
+     *  Holds the value of selectedFood category
+     */
+    String foodCategory;
+
+    /**
      * Function which return the enclosing view class, this will be used to
      * create the respective view bind it to the Context
      *
@@ -71,9 +82,10 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
 
                 mView.mSelectedFoodType.setText(getString(R.string.packed_txt));
 
-                for(HLObject object: collectionCenters) {
+                for (HLObject object : collectionCenters) {
                     if (object.getString("processedFood").equals("true")) {
                         mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude")+","+object.getString("longitude");
                         break;
                     }
                 }
@@ -91,11 +103,42 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 for (HLObject object : collectionCenters) {
                     if (object.getString("rawMaterials").equals("true")) {
                         mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude")+","+object.getString("longitude");
                         break;
                     }
                 }
             }
         });
+
+        mView.mBookNtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(loc != null && destLocation != null) {
+                    HLObject trip = new HLObject(Constants.Trip.TRIP);
+                    trip.put(Constants.Trip.PICKUP_LOCATION, loc.getLatitude() + "," + loc.getLongitude());
+                    trip.put(Constants.Trip.DISPATCH_LOCATION, destLocation);
+                    trip.put(Constants.Trip.STATUS, Constants.NULL);
+                    trip.put(Constants.Trip.FARE, Constants.NULL);
+
+                    try {
+                        if (trip.save()) {
+
+                            HLObject food = new HLObject(Constants.Food.FOOD);
+                            food.put(Constants.Trip.TRIP_ID, trip);
+                            food.put(Constants.Food.CATEGORY, foodCategory);
+                            food.save();
+
+                        }
+                    } catch (HLQuery.HLQueryException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+
 
         CollectionCenterJSONLoader collectionCenterJSONLoader=new CollectionCenterJSONLoader();
         collectionCenterJSONLoader.execute();
