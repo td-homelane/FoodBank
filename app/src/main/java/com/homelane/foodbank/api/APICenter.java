@@ -63,7 +63,7 @@ public final class APICenter {
 
     /**
      * function which request for a pick up
-     * 
+     *
      * @param mTrip the trip object contains all the values
      * @param callback the delegate call back to be called on success or error
      *                 of the request
