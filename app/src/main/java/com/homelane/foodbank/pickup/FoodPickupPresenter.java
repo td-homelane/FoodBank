@@ -150,8 +150,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                             food.put(Constants.Trip.TRIP_ID, trip);
                             food.put(Constants.Food.CATEGORY, foodCategory);
                             boolean status = food.save();
-                            Log.d("TAG","status --- "+status);
-
                             APICenter.requestPickUp(trip, new APICenter.APIInterface() {
                                 /**
                                  * delegate method which will be called on completion of the request

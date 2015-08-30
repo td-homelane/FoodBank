@@ -570,7 +570,7 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
         SQLiteDatabase db = HLCoreDatabase.obtain().getWritableDatabase();
         String args = TextUtils.join(", ", ids);
         try {
-            db.execSQL(String.format("DELETE FROM " + mClassName + " WHERE " + HLConstants._ID + " IN (%s);", args));
+            db.execSQL(String.format("DELETE FROM " + mClassName + " WHERE " + HLConstants._ID + " = ? ", args));
         }catch(SQLException e){
             throw new HLDeleteException(e.getLocalizedMessage());
         }
