@@ -105,6 +105,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             }
         });
 */
+        mView.mBookBtn.setEnabled(false);
         mView.foodIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +126,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 if(loc != null){
                     updateFare();
                 }
-
+                mView.mBookBtn.setEnabled(true);
             }
         });
 

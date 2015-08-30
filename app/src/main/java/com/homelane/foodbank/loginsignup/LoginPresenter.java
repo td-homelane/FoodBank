@@ -14,6 +14,7 @@ import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.orm.HLQuery;
 import com.hl.hlcorelib.orm.HLUser;
 import com.hl.hlcorelib.utils.HLFragmentUtils;
+import com.hl.hlcorelib.utils.HLPreferenceUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.loginsignup.forgotpassword.ForgotPasswordDialog;
@@ -83,6 +84,8 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
                     try {
                         HLUser us = HLUser.signIn(mView.mEmail.getText().toString(), mView.mPassword.getText().toString());
                         if (us != null) {
+                            HLPreferenceUtils.obtain().put(HLConstants._ID,us.getmObjectId());
+
                             HLFragmentUtils.HLFragmentTransaction transaction =
                                     new HLFragmentUtils.HLFragmentTransaction();
                             transaction.mFragmentClass = FoodPickupPresenter.class;
