@@ -7,12 +7,16 @@ import android.view.MenuItem;
 
 import com.hl.hlcorelib.HLLoaderInterface;
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
+import com.hl.hlcorelib.mvp.events.HLEvent;
+import com.hl.hlcorelib.mvp.events.HLEventListener;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.orm.HLQuery;
+import com.hl.hlcorelib.utils.HLFragmentUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.main.MainPresenter;
+import com.homelane.foodbank.pickup.MapViewPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,8 @@ import java.util.List;
 /**
  * Created by hl0395 on 29/8/15.
  */
-public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implements HLLoaderInterface<HLObject> {
+public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implements
+        HLLoaderInterface<HLObject>, HLEventListener {
 
     /**
      * Adapter for the recyler view
@@ -64,6 +69,9 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
         mView.mTripHistoryList.setAdapter(mAdapter);
         load(Constants.Trip.TRIP);
         setHasOptionsMenu(true);
+        if(!hasEventListener(Constants.ON_HISTORY_ITEM_CLICK, this)){
+            addEventListener(Constants.ON_HISTORY_ITEM_CLICK, this);
+        }
     }
 
 
@@ -81,7 +89,7 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
         query.chain(Constants.Trip.TRIP_ID, foodQuery, false);
 
         query.setMselect(new String[]{Constants.Trip.DISPATCH_LOCATION, Constants.Trip.STATUS,Constants.Trip.FARE,
-                Constants.Trip.START_TIME});
+                Constants.Trip.START_TIME, Constants.Trip.MAP_LINK});
         query.query(new HLQuery.HLQueryCallback() {
             /**
              * Delegate method to be called on completion of the query
@@ -110,7 +118,17 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
         }
     }
 
-
+    /**
+     * Called when the fragment is visible to the user and actively running.
+     * This is generally
+     * tied to {@link Activity#onResume() Activity.onResume} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        //((MainPresenter)getActivity()).getSupportActionBar().setTitle("Your Sharing......");
+    }
 
     /**
      * Function which will be called {@link Fragment#onSaveInstanceState(Bundle)}
@@ -139,6 +157,8 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
     @Override
     protected void onDestroyHLView() {
         super.onDestroyHLView();
+        if(hasEventListener(Constants.ON_HISTORY_ITEM_CLICK, this))
+            removeEventListener(Constants.ON_HISTORY_ITEM_CLICK, this);
     }
 
     /**
@@ -190,5 +210,25 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Delegate method which will be called against respective events
+     *
+     * @param event the event which is dispatched by the {@link HLDispatcher}
+     */
+    @Override
+    public void onEvent(HLEvent event) {
+        final int pos = ((HLCoreEvent)event).getmExtra().getInt(Constants.Trip.TRIP_ID);
+        HLObject trip = mAdapter.getmDataProvider().get(pos);
+        HLFragmentUtils.HLFragmentTransaction transaction =
+                new HLFragmentUtils.HLFragmentTransaction();
+        final Bundle data = new Bundle();
+        data.putString(Constants.URL, trip.getString(Constants.Trip.MAP_LINK));
+        data.putBoolean(Constants.BACK_TO_DROP_FOOD, false);
+        transaction.mFragmentClass = MapViewPresenter.class;
+        transaction.mFrameId = R.id.fragment_frame;
+        transaction.mParameters = data;
+        push(transaction);
     }
 }

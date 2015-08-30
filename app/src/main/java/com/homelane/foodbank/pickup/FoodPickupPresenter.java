@@ -78,6 +78,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     protected void onBindView() {
         super.onBindView();
 
+/*
         mView.clothingIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +86,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 mView.mSelectedFoodType.setText("Clothing");
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
+                mView.mContentsView.setVisibility(View.VISIBLE);
 
             }
         });
@@ -96,9 +98,11 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 mView.mSelectedFoodType.setText("Medicines");
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
+                mView.mContentsView.setVisibility(View.VISIBLE);
 
             }
         });
+*/
         mView.foodIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,31 +111,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
                 foodCategory = getString(R.string.packed_txt);
-                
-                for (HLObject object : collectionCenters) {
-                    if (object.getString("processedFood").equals("true")) {
-                        mView.mDestinationLocation.setText(object.getString("name"));
-                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
-                        break;
-                    }
-                }
-                if(loc != null){
-                    updateFare();
-                }
-
-            }
-        });
-
-
-
-        mView.mPackedFood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                foodCategory = getString(R.string.packed_txt);
-                mView.mTypeLayout.setVisibility(View.GONE);
-                mView.mConfirmLayout.setVisibility(View.VISIBLE);
-
-                mView.mSelectedFoodType.setText(getString(R.string.packed_txt));
+                mView.mContentsView.setVisibility(View.VISIBLE);
 
                 for (HLObject object : collectionCenters) {
                     if (object.getString("processedFood").equals("true")) {
@@ -143,32 +123,13 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 if(loc != null){
                     updateFare();
                 }
+
             }
         });
 
-        mView.mRawFood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                foodCategory = getString(R.string.raw_materials);
-                mView.mTypeLayout.setVisibility(View.GONE);
-                mView.mConfirmLayout.setVisibility(View.VISIBLE);
 
-                mView.mSelectedFoodType.setText(getString(R.string.raw_materials));
 
-                for (HLObject object : collectionCenters) {
-                    if (object.getString("rawMaterials").equals("true")) {
-                        mView.mDestinationLocation.setText(object.getString("name"));
-                        destLocation = object.getString("latitude")+","+object.getString("longitude");
-                        break;
-                    }
-                }
-                if(loc != null){
-                    updateFare();
-                }
-            }
-        });
-
-        mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
+         mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mView.mBookBtn.setText("Requesting.....");
@@ -557,7 +518,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             @Override
             protected void onPostExecute(String s) {
                 str = s;
-                if(mView.mCuurentLocation != null)
+                if(isVisible() && mView.mCuurentLocation != null)
                     mView.mCuurentLocation.setText(s);
             }
         }.execute(Latitude, longitude);

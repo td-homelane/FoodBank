@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,12 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 public class FoodPickupView implements HLView {
 
     private View mView;
-    TextView mPackedFood, mRawFood;
-    RelativeLayout mTypeLayout,mConfirmLayout;
     TextView mSelectedFoodType,mCuurentLocation,mDestinationLocation,mFareEstimate;
     Button mBookBtn;
     ProgressBar mFareStatusProgress;
     ImageView clothingIcon, medicinelIcon, foodIcon, rlIcon4;
     FloatingActionMenu centerBottomMenu;
+    CardView mContentsView;
 
     /**
      * Create the view from the id provided
@@ -41,16 +41,14 @@ public class FoodPickupView implements HLView {
     @Override
     public void init(LayoutInflater inflater, ViewGroup parent) {
         mView = inflater.inflate(R.layout.pickup_layout, parent, false);
-        mPackedFood = (TextView) mView.findViewById(R.id.packed_text);
-        mRawFood = (TextView) mView.findViewById(R.id.raw_material);
-        mTypeLayout = (RelativeLayout) mView.findViewById(R.id.typeLayout);
-        mConfirmLayout = (RelativeLayout) mView.findViewById(R.id.confirmLayout);
         mSelectedFoodType = (TextView) mView.findViewById(R.id.selectedType);
         mCuurentLocation = (TextView) mView.findViewById(R.id.current_location);
         mDestinationLocation = (TextView) mView.findViewById(R.id.destination_name);
         mFareEstimate = (TextView) mView.findViewById(R.id.fare_estimate);
         mBookBtn = (Button) mView.findViewById(R.id.bookBtn);
         mFareStatusProgress = (ProgressBar) mView.findViewById(R.id.fareProgressBar);
+        mContentsView = (CardView) mView.findViewById(R.id.contents_view);
+        mContentsView.setVisibility(View.GONE);
         FloatingActionButton floatingActionButton = (FloatingActionButton) mView.findViewById(R.id.fab);
 
         SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(mView.getContext())
