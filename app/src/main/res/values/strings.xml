@@ -40,7 +40,7 @@
     <string name="packed_txt">Packed</string>
     <string name="food_type_share">What type of food do you wish to share ?</string>
     <string name="address_output_string">%1$s %2$s %3$s</string>
-    <string name="no_address_found">11, Lavelle Rd, Ashok Nagar, Bengaluru</string>
+    <string name="no_address_found">Not able to fetch the address. But we have your location </string>
 
     <string name="menu_logout">Logout</string>
     <string name="menu_history">History</string>

@@ -48,7 +48,7 @@ public class FoodPickupView implements HLView {
         mFareStatusProgress = (ProgressBar) mView.findViewById(R.id.fareProgressBar);
         mContentsView = (CardView) mView.findViewById(R.id.contents_view);
         mContentsView.setVisibility(View.GONE);
-        
+
         FloatingActionButton floatingActionButton = (FloatingActionButton) mView.findViewById(R.id.fab);
 
         SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(mView.getContext())

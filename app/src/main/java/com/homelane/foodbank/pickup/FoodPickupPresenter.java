@@ -493,7 +493,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     /**
      * Method to get the address of GPS latitude/longitude.
      */
-    private String getAddressByGpsCoordinates(String Latitude, String longitude) {
+    private String getAddressByGpsCoordinates(final String Latitude, final String longitude) {
         // TODO Auto-generated method stub
         new AsyncTask<String, String, String>(
 
@@ -550,9 +550,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                         }
 
                         // If there aren't any addresses, post a message
-                    } else {
-                        if (getActivity() != null)
-                            str = getActivity().getString(R.string.no_address_found);
                     }
                 }
                 return str;
@@ -561,6 +558,10 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             @Override
             protected void onPostExecute(String s) {
                 str = s;
+
+                if(str.equals("")||str.length()==0)
+                    str=getActivity().getString(R.string.no_address_found) + Latitude +", "+longitude;
+
                 if(isVisible() && mView.mCuurentLocation != null)
                     mView.mCuurentLocation.setText(s);
             }
