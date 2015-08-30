@@ -96,7 +96,7 @@ public final class APICenter {
                         if (response != null && response.optString("request_id") != null) {
                             mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
                             if(response.optString("status") != null){
-                                mTrip.put(Constants.Trip.STATUS, response.getString("status"));
+                                mTrip.put(Constants.Trip.FARE, response.getString("total_charged"));
                             }
                             mTrip.save();
                             if(callback != null) {
