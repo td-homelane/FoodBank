@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hl.hlcorelib.orm.HLObject;
+import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 
 import java.util.ArrayList;
@@ -77,6 +78,16 @@ public class TripHistoryAdapter extends RecyclerView.Adapter<TripHistoryAdapter.
         final int pos = position;
         HLObject history = mDataProvider.get(position);
 
+        ArrayList<HLObject> tripObjects= (ArrayList)history.getList(Constants.Trip.TRIP_ID);
+
+        if(tripObjects.size() > 0) {
+            HLObject tripObject = tripObjects.get(0);
+            holder.mDeliveryStatus.setText(tripObject.getString(Constants.Trip.STATUS));
+        }
+
+        holder.mTripDate.setText(history.getString(Constants.Trip.START_TIME));
+        holder.mFoodType.setText(history.getString(Constants.Food.CATEGORY));
+        holder.mTripFare.setText(history.getString(Constants.Trip.FARE));
 
 
     }

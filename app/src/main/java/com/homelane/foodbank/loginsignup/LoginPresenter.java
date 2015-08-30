@@ -1,5 +1,6 @@
 package com.homelane.foodbank.loginsignup;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -70,10 +71,32 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
                 addEventListener(Constants.ON_FORGOT_PWD_EVENT,LoginPresenter.this);
 
                 forgotPasswordDialog=new ForgotPasswordDialog();
-                forgotPasswordDialog.show(getChildFragmentManager(),ForgotPasswordDialog.class.getName());
+                forgotPasswordDialog.show(getChildFragmentManager(), ForgotPasswordDialog.class.getName());
             }
         });
 
+        mView.mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mView.validateFields()) {
+                    try {
+                        HLUser us = HLUser.signIn(mView.mEmail.getText().toString(), mView.mPassword.getText().toString());
+                        if (us != null) {
+                            HLFragmentUtils.HLFragmentTransaction transaction =
+                                    new HLFragmentUtils.HLFragmentTransaction();
+                            transaction.mFragmentClass = FoodPickupPresenter.class;
+                            transaction.mFrameId = R.id.fragment_frame;
+                            push(transaction);
+                        }
+                    } catch (HLUser.HLUserExistException e) {
+                        showToast(e.getMessage());
+                    }
+
+                }
+
+            }
+        });
 
     }
 

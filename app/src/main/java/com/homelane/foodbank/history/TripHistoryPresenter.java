@@ -69,9 +69,9 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
     public void load(String name) {
         HLQuery query = new HLQuery(name);
 
-        HLQuery projectQuery = new HLQuery(Constants.Food.FOOD);
-        projectQuery.setMselect(new String[]{Constants.Food.CATEGORY});
-        query.chain(Constants.Trip.TRIP_ID, projectQuery, true);
+        HLQuery foodQuery = new HLQuery(Constants.Food.FOOD);
+        foodQuery.setMselect(new String[]{Constants.Food.CATEGORY});
+        query.chain(Constants.Trip.TRIP_ID, foodQuery, false);
 
         query.setMselect(new String[]{Constants.Trip.DISPATCH_LOCATION, Constants.Trip.STATUS,Constants.Trip.FARE,
                 Constants.Trip.START_TIME});

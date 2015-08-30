@@ -142,12 +142,16 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/fare_estimate"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/fare_estimate"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </LinearLayout>
 
 
