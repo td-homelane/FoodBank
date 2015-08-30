@@ -151,11 +151,25 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             }
         });
 
+        mView.medicinelIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+            }
+        });
+
+        mView.clothingIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+            }
+        });
+
         mView.serialIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mView.centerBottomMenu.close(true);
-                mView.mSelectedFoodType.setText("Serials");
+                mView.mSelectedFoodType.setText("Cereals");
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
                 foodCategory = mView.mSelectedFoodType.getText().toString();
@@ -550,7 +564,9 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                         }
 
                         // If there aren't any addresses, post a message
-                    }
+                    }else
+                            str=getActivity().getString(R.string.no_address_found) + Latitude +", "+longitude;
+
                 }
                 return str;
             }
@@ -559,8 +575,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             protected void onPostExecute(String s) {
                 str = s;
 
-                if(str.equals("")||str.length()==0)
-                    str=getActivity().getString(R.string.no_address_found) + Latitude +", "+longitude;
 
                 if(isVisible() && mView.mCuurentLocation != null)
                     mView.mCuurentLocation.setText(s);
