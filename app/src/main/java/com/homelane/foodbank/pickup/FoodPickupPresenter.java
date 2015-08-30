@@ -152,8 +152,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                             food.put(Constants.Trip.TRIP_ID, trip);
                             food.put(Constants.Food.CATEGORY, foodCategory);
                             boolean status = food.save();
-                            Log.d("TAG","status --- "+status);
-
                             APICenter.requestPickUp(trip, new APICenter.APIInterface() {
                                 /**
                                  * delegate method which will be called on completion of the request
@@ -196,12 +194,13 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                                             }
                                         });
                                     } else {
+
+                                        showToast("Unable to find the drivers nearby");
+
+                                        mView.mBookBtn.setText("Retry");
+                                        mView.mBookBtn.setEnabled(true);
                                         try {
                                             response.delete();
-                                            showToast("Unable to find the drivers nearby");
-
-                                            mView.mBookBtn.setText("Retry");
-                                            mView.mBookBtn.setEnabled(true);
                                         } catch (HLObject.HLDeleteException e) {
 
                                         }

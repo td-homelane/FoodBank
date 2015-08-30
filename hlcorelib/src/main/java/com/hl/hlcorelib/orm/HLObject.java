@@ -34,13 +34,17 @@ import android.text.TextUtils;
 
 import com.hl.hlcorelib.HLPrimitiveGetSetInterface;
 import com.hl.hlcorelib.db.HLCoreDatabase;
+import com.hl.hlcorelib.utils.ExternalAppUtils;
 import com.hl.hlcorelib.utils.HLPreferenceUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * The class Act as the common VO class for the project
@@ -140,16 +144,22 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
     /**
      * Reference to the time which the object created, this will be system time in milliseconds
      */
-    protected long mCreatedTime;
+    protected String mCreatedTime;
 
 
     /**
      * The time when a change happened to any of the object properties this will be time is milli seconds
      */
-    protected long mUpdatedTime;
+    protected String mUpdatedTime;
 
     public Date getmCreatedTime() {
-        return new Date(mCreatedTime);
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            return dateFormat.parse(mCreatedTime);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     /**
@@ -325,8 +335,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mClassName);
         dest.writeString(mObjectId);
-        dest.writeLong(mUpdatedTime);
-        dest.writeLong(mCreatedTime);
+        dest.writeString(mUpdatedTime);
+        dest.writeString(mCreatedTime);
         dest.writeInt(mIsDirty ? 1 : 0);
         dest.writeInt(mIsSynced ? 1 : 0);
     }
@@ -384,8 +394,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
     HLObject(Parcel in) {
         mClassName = in.readString();
         mObjectId  = in.readString();
-        mUpdatedTime = in.readLong();
-        mCreatedTime = in.readLong();
+        mUpdatedTime = in.readString();
+        mCreatedTime = in.readString();
         mIsDirty     = (in.readInt() == 1);
         mIsSynced    = (in.readInt() == 1);
     }
@@ -560,7 +570,7 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
         SQLiteDatabase db = HLCoreDatabase.obtain().getWritableDatabase();
         String args = TextUtils.join(", ", ids);
         try {
-            db.execSQL(String.format("DELETE FROM " + mClassName + " WHERE " + HLConstants._ID + " IN (%s);", args));
+            db.execSQL(String.format("DELETE FROM " + mClassName + " WHERE " + HLConstants._ID + " = ? ", args));
         }catch(SQLException e){
             throw new HLDeleteException(e.getLocalizedMessage());
         }
@@ -597,8 +607,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
             ContentValues cv = new ContentValues();
             try {
                 if (!mIsSynced) {
-                    mCreatedTime = new Date().getTime();
-                    mUpdatedTime = new Date().getTime();
+                    mCreatedTime = getDateTime();
+                    mUpdatedTime = getDateTime();
                     mObjectId = Long.toHexString(System.nanoTime());
                     cv.put(HLConstants._ID, mObjectId);
                     cv = setMapValues(cv);
@@ -609,7 +619,7 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
                     mIsDirty = !mIsSynced;
                     return mIsSynced;
                 } else {
-                    mUpdatedTime = new Date().getTime();
+                    mUpdatedTime = getDateTime();
                     cv = setMapValues(cv);
                     cv.put(HLConstants._updatedAt, mUpdatedTime);
                     cv = overrideColumValues(cv);
@@ -632,8 +642,19 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
      * @return return the cobined string with default columns
      */
     protected String addDefaultColumns(String tableQuery){
-        return tableQuery + ", " + HLConstants._createdAt + " integer not null, " +
-                HLConstants._updatedAt + " integer not null";
+        return tableQuery + ", " + HLConstants._createdAt + " text not null, " +
+                HLConstants._updatedAt + " text not null";
+    }
+
+    /**
+     * function returns the default locale time
+     * @return the current time on the device
+     */
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     /**
@@ -792,8 +813,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
             }
         }
         object.mObjectId = cursor.getString(cursor.getColumnIndex(HLConstants._ID));
-        object.mUpdatedTime = cursor.getInt(cursor.getColumnIndex(HLConstants._updatedAt));
-        object.mCreatedTime = cursor.getInt(cursor.getColumnIndex(HLConstants._createdAt));
+        object.mUpdatedTime = cursor.getString(cursor.getColumnIndex(HLConstants._updatedAt));
+        object.mCreatedTime = cursor.getString(cursor.getColumnIndex(HLConstants._createdAt));
         if(isUser){
             ((HLUser)object).setmEmail(cursor.getString(cursor.getColumnIndex(HLConstants._user_email)));
             ((HLUser)object).setmName(cursor.getString(cursor.getColumnIndex(HLConstants._user_name)));
