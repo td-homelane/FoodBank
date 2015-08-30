@@ -102,16 +102,41 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             }
         });
 */
-        mView.foodIcon.setOnClickListener(new View.OnClickListener() {
+        mView.mBookBtn.setEnabled(false);
+        mView.packedIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mView.centerBottomMenu.close(true);
-                mView.mSelectedFoodType.setText("Food");
+                mView.mSelectedFoodType.setText("Packed Food");
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
-                foodCategory = getString(R.string.packed_txt);
+                foodCategory = mView.mSelectedFoodType.getText().toString();
                 mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
+                for (HLObject object : collectionCenters) {
+                    if (object.getString("processedFood").equals("true")) {
+                        mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
+                        break;
+                    }
+                }
+                if (loc != null) {
+                    updateFare();
+                }
+                mView.mBookBtn.setEnabled(true);
+            }
+        });
 
+        mView.rawIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Fresh Produce");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+                foodCategory = mView.mSelectedFoodType.getText().toString();
+                mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
                 for (HLObject object : collectionCenters) {
                     if (object.getString("processedFood").equals("true")) {
                         mView.mDestinationLocation.setText(object.getString("name"));
@@ -122,11 +147,33 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 if(loc != null){
                     updateFare();
                 }
-
+                mView.mBookBtn.setEnabled(true);
             }
         });
 
-
+        mView.serialIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Serials");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+                foodCategory = mView.mSelectedFoodType.getText().toString();
+                mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
+                for (HLObject object : collectionCenters) {
+                    if (object.getString("processedFood").equals("true")) {
+                        mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
+                        break;
+                    }
+                }
+                if (loc != null) {
+                    updateFare();
+                }
+                mView.mBookBtn.setEnabled(true);
+            }
+        });
 
          mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -361,9 +408,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
      */
     @Override
     public boolean onBackPressed() {
-        if (mView.onBackPreseed())
-            return true;
-
         return super.onBackPressed();
     }
 
