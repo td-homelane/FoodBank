@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodBank</string>
+    <string name="app_name">SahayaCar</string>
 
     <string name="db_name">FoodBank</string>
     <integer name="db_version">1</integer>
@@ -17,7 +17,7 @@
     <!-- Signup -->
 
     <string name="first_name_txt">First Name</string>
-    <string name="last_name_txt">First Name</string>
+    <string name="last_name_txt">Last Name</string>
     <string name="verify_txt">Verify</string>
     <string name="signup_failed_msg">Signup failed please try again</string>
 
