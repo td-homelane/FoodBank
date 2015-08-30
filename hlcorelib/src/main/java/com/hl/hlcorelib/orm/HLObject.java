@@ -37,6 +37,7 @@ import com.hl.hlcorelib.db.HLCoreDatabase;
 import com.hl.hlcorelib.utils.HLPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -146,6 +147,10 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
      * The time when a change happened to any of the object properties this will be time is milli seconds
      */
     protected long mUpdatedTime;
+
+    public Date getmCreatedTime() {
+        return new Date(mCreatedTime);
+    }
 
     /**
      * Function set the unique key map, this further calls {@link #put(String, String)}

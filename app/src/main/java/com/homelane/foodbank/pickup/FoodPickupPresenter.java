@@ -83,6 +83,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
         mView.mPackedFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                foodCategory = getString(R.string.packed_txt);
                 mView.mTypeLayout.setVisibility(View.GONE);
                 mView.mConfirmLayout.setVisibility(View.VISIBLE);
 
@@ -104,6 +105,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
         mView.mRawFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                foodCategory = getString(R.string.raw_materials);
                 mView.mTypeLayout.setVisibility(View.GONE);
                 mView.mConfirmLayout.setVisibility(View.VISIBLE);
 
@@ -300,7 +302,10 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
              */
             @Override
             public void onResult(HLObject response) {
-                mView.mFareEstimate.setText(response.getString(Constants.Trip.FARE));
+                if(isVisible()) {
+                    mView.mFareEstimate.setText(response.getString(Constants.Trip.FARE));
+                    mView.mFareStatusProgress.setVisibility(View.GONE);
+                }
             }
         });
     }

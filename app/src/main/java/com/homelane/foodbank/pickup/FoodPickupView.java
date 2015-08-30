@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class FoodPickupView implements HLView {
     RelativeLayout mTypeLayout,mConfirmLayout;
     TextView mSelectedFoodType,mCuurentLocation,mDestinationLocation,mFareEstimate;
     Button mBookBtn;
+    ProgressBar mFareStatusProgress;
 
 
 
@@ -44,6 +46,7 @@ public class FoodPickupView implements HLView {
         mDestinationLocation = (TextView) mView.findViewById(R.id.destination_name);
         mFareEstimate = (TextView) mView.findViewById(R.id.fare_estimate);
         mBookBtn = (Button) mView.findViewById(R.id.bookBtn);
+        mFareStatusProgress = (ProgressBar) mView.findViewById(R.id.fareProgressBar);
     }
 
     /**

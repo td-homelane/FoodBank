@@ -99,7 +99,7 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
     public void onLoad(List<HLObject> list) {
         if(list != null && list.size() > 0){
             mAdapter.setmDataProvider((ArrayList<HLObject>)list);
-            mView.mTripHistoryList.swapAdapter(mAdapter, false);
+            mView.mTripHistoryList.swapAdapter(mAdapter, true);
         }
     }
 
