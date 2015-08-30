@@ -1,1 +1,1 @@
-include ':app', ':hlcorelib'
+include ':app', ':hlcorelib', ':circularFloatingMenu'
