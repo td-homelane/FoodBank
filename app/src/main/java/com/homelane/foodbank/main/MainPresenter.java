@@ -78,6 +78,9 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
         Bundle bundle = e.getmExtra();
 
         if(e.getType().equals(Constants.ON_LOGOUT_EVENT)) {
+
+            HLPreferenceUtils.obtain().put(HLConstants._ID,null);
+
             HLFragmentUtils.HLFragmentTransaction transaction =
                     new HLFragmentUtils.HLFragmentTransaction();
             transaction.isRoot = true;
