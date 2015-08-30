@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName|textCapSentences"
-                android:hint="@string/first_name_txt"
+                android:hint="@string/last_name_txt"
                 android:id="@+id/last_name_editText"/>
         </LinearLayout>
 
