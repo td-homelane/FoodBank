@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.hl.hlcorelib.mvp.HLView;
 import com.homelane.foodbank.R;
 
-import java.util.regex.Pattern;
-
 /**
  * Created by hl0395 on 29/8/15.
  */

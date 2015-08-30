@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hl.hlcorelib.mvp.HLView;
@@ -62,7 +61,7 @@ public class FoodPickupView implements HLView {
         clothingIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.clothing));
         medicinelIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.medicalsupplies));
         foodIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.sharefood));
-        rlIcon4.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.appicon));
+        rlIcon4.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_freshproduce));
 
 
         centerBottomMenu = new FloatingActionMenu.Builder(mView.getContext())
