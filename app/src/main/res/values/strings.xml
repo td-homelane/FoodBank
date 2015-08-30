@@ -35,7 +35,7 @@
     <string name="destination_txt">Destination</string>
     <string name="fare_estimate">Estimated Fare</string>
     <string name="book_cab">Book</string>
-    <string name="selected_type">Selected food type</string>
+    <string name="selected_type">Select any type</string>
     <string name="raw_materials">Raw materials</string>
     <string name="packed_txt">Packed</string>
     <string name="food_type_share">What type of food do you wish to share ?</string>
