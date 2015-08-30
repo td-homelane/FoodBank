@@ -27,7 +27,7 @@ public class FoodPickupView implements HLView {
     TextView mSelectedFoodType,mCuurentLocation,mDestinationLocation,mFareEstimate;
     Button mBookBtn;
     ProgressBar mFareStatusProgress;
-    ImageView clothingIcon, medicinelIcon, foodIcon, rlIcon4;
+    ImageView clothingIcon, medicinelIcon, packedIcon, rawIcon, serialIcon;
     FloatingActionMenu centerBottomMenu;
     CardView mContentsView;
 
@@ -48,6 +48,7 @@ public class FoodPickupView implements HLView {
         mFareStatusProgress = (ProgressBar) mView.findViewById(R.id.fareProgressBar);
         mContentsView = (CardView) mView.findViewById(R.id.contents_view);
         mContentsView.setVisibility(View.GONE);
+        
         FloatingActionButton floatingActionButton = (FloatingActionButton) mView.findViewById(R.id.fab);
 
         SubActionButton.Builder rLSubBuilder = new SubActionButton.Builder(mView.getContext())
@@ -55,13 +56,15 @@ public class FoodPickupView implements HLView {
 
         clothingIcon = new ImageView(mView.getContext());
         medicinelIcon = new ImageView(mView.getContext());
-        foodIcon = new ImageView(mView.getContext());
-        rlIcon4 = new ImageView(mView.getContext());
+        packedIcon = new ImageView(mView.getContext());
+        rawIcon = new ImageView(mView.getContext());
+        serialIcon = new ImageView(mView.getContext());
 
         clothingIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.clothing));
-        medicinelIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.medicalsupplies));
-        foodIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.sharefood));
-        rlIcon4.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_freshproduce));
+        medicinelIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_medication));
+        packedIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_packagedfood));
+        rawIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_freshproduce));
+        serialIcon.setImageDrawable(mView.getContext().getResources().getDrawable(R.mipmap.type_cerealsandgrains));
 
 
         centerBottomMenu = new FloatingActionMenu.Builder(mView.getContext())
@@ -70,8 +73,9 @@ public class FoodPickupView implements HLView {
                 .setAnimationHandler(new SlideInAnimationHandler())
                 .addSubActionView(rLSubBuilder.setContentView(clothingIcon).build())
                 .addSubActionView(rLSubBuilder.setContentView(medicinelIcon).build())
-                .addSubActionView(rLSubBuilder.setContentView(foodIcon).build())
-                .addSubActionView(rLSubBuilder.setContentView(rlIcon4).build())
+                .addSubActionView(rLSubBuilder.setContentView(packedIcon).build())
+                .addSubActionView(rLSubBuilder.setContentView(rawIcon).build())
+                .addSubActionView(rLSubBuilder.setContentView(serialIcon).build())
                 .attachTo(floatingActionButton)
                 .build();
 

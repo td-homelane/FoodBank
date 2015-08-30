@@ -1,7 +1,6 @@
 package com.homelane.foodbank.pickup;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,8 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
@@ -105,16 +103,40 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
         });
 */
         mView.mBookBtn.setEnabled(false);
-        mView.foodIcon.setOnClickListener(new View.OnClickListener() {
+        mView.packedIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mView.centerBottomMenu.close(true);
-                mView.mSelectedFoodType.setText("Food");
+                mView.mSelectedFoodType.setText("Packed Food");
                 mView.mFareEstimate.setText("");
                 mView.mDestinationLocation.setText("");
-                foodCategory = getString(R.string.packed_txt);
+                foodCategory = mView.mSelectedFoodType.getText().toString();
                 mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
+                for (HLObject object : collectionCenters) {
+                    if (object.getString("processedFood").equals("true")) {
+                        mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
+                        break;
+                    }
+                }
+                if (loc != null) {
+                    updateFare();
+                }
+                mView.mBookBtn.setEnabled(true);
+            }
+        });
 
+        mView.rawIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Fresh Produce");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+                foodCategory = mView.mSelectedFoodType.getText().toString();
+                mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
                 for (HLObject object : collectionCenters) {
                     if (object.getString("processedFood").equals("true")) {
                         mView.mDestinationLocation.setText(object.getString("name"));
@@ -129,7 +151,29 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             }
         });
 
-
+        mView.serialIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Serials");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+                foodCategory = mView.mSelectedFoodType.getText().toString();
+                mView.mContentsView.setVisibility(View.VISIBLE);
+                mView.mFareStatusProgress.setVisibility(View.VISIBLE);
+                for (HLObject object : collectionCenters) {
+                    if (object.getString("processedFood").equals("true")) {
+                        mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
+                        break;
+                    }
+                }
+                if (loc != null) {
+                    updateFare();
+                }
+                mView.mBookBtn.setEnabled(true);
+            }
+        });
 
          mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -364,9 +408,6 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
      */
     @Override
     public boolean onBackPressed() {
-        if (mView.onBackPreseed())
-            return true;
-
         return super.onBackPressed();
     }
 
