@@ -189,12 +189,13 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                                             }
                                         });
                                     } else {
+
+                                        showToast("Unable to find the drivers nearby");
+
+                                        mView.mBookBtn.setText("Retry");
+                                        mView.mBookBtn.setEnabled(true);
                                         try {
                                             response.delete();
-                                            showToast("Unable to find the drivers nearby");
-
-                                            mView.mBookBtn.setText("Retry");
-                                            mView.mBookBtn.setEnabled(true);
                                         } catch (HLObject.HLDeleteException e) {
 
                                         }
