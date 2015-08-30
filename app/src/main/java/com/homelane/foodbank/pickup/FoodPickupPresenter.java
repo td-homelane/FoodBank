@@ -142,7 +142,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                             HLObject food = new HLObject(Constants.Food.FOOD);
                             food.put(Constants.Trip.TRIP_ID, trip);
                             food.put(Constants.Food.CATEGORY, foodCategory);
-                            food.save();
+                            boolean status = food.save();
+                            Log.d("TAG","status --- "+status);
 
                             APICenter.requestPickUp(trip, new APICenter.APIInterface() {
                                 /**
@@ -152,8 +153,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                                  */
                                 @Override
                                 public void onResult(HLObject response) {
-                                    if(response.getString(Constants.Trip.STATUS).
-                                            equals(Constants.TripStatus.COMPLETED)){
+                                    if (response.getString(Constants.Trip.STATUS).
+                                            equals(Constants.TripStatus.COMPLETED)) {
                                         APICenter.getRequestMap(response, new APICenter.APIInterface() {
                                             /**
                                              * delegate method which will be called on completion of the request
@@ -185,14 +186,14 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
 
                                             }
                                         });
-                                    }else{
+                                    } else {
                                         try {
                                             response.delete();
                                             showToast("Unable to find the drivers nearby");
 
                                             mView.mBookBtn.setText("Retry");
                                             mView.mBookBtn.setEnabled(true);
-                                        }catch (HLObject.HLDeleteException e){
+                                        } catch (HLObject.HLDeleteException e) {
 
                                         }
                                     }
@@ -210,7 +211,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                                         trip.delete();
                                         mView.mBookBtn.setText("Retry");
                                         mView.mBookBtn.setEnabled(true);
-                                    }catch (HLObject.HLDeleteException ex){
+                                    } catch (HLObject.HLDeleteException ex) {
                                         Log.d("hello", "hello");
                                     }
                                 }
@@ -239,27 +240,29 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
         }else{
             mGPSTracker.showSettingsAlert();
 
-            locHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    if(mGPSTracker.canGetLocation()) {
-                        loc = mGPSTracker.getLocation();
-                        mView.mCuurentLocation.setText(getAddressByGpsCoordinates(loc.getLatitude() + "",
-                                loc.getLongitude() + ""));
-                        if(destLocation != null){
-                            updateFare();
-                        }
-                        updateFare();
-                        locHandler.removeCallbacks(this);
-                    }else
-                        locHandler.postDelayed(this,2000);
-                }
-            },2000);
+            locHandler.postDelayed(locRunnable, 2000);
         }
 
         setHasOptionsMenu(true);
     }
+
+    Runnable locRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(mGPSTracker.canGetLocation()) {
+                loc = mGPSTracker.getLocation();
+                mView.mCuurentLocation.setText(getAddressByGpsCoordinates(loc.getLatitude() + "",
+                        loc.getLongitude() + ""));
+                if(destLocation != null){
+                    updateFare();
+                }
+                updateFare();
+                locHandler.removeCallbacks(this);
+            }else
+                locHandler.postDelayed(this,2000);
+
+        }
+    };
 
     Handler locHandler = new Handler();
 
@@ -365,6 +368,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
         if(mGPSTracker != null){
             mGPSTracker.stopUsingGPS();
             mGPSTracker = null;
+            locHandler.removeCallbacks(locRunnable);
         }
     }
 
