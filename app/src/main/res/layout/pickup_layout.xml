@@ -105,6 +105,7 @@
                 android:layout_centerHorizontal="true" />
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/selectedType"
                 android:layout_width="match_parent"
                 android:layout_weight="1"

@@ -78,6 +78,50 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     protected void onBindView() {
         super.onBindView();
 
+        mView.clothingIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Clothing");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+
+            }
+        });
+
+        mView.medicinelIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Medicines");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+
+            }
+        });
+        mView.foodIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mView.centerBottomMenu.close(true);
+                mView.mSelectedFoodType.setText("Food");
+                mView.mFareEstimate.setText("");
+                mView.mDestinationLocation.setText("");
+                foodCategory = getString(R.string.packed_txt);
+                
+                for (HLObject object : collectionCenters) {
+                    if (object.getString("processedFood").equals("true")) {
+                        mView.mDestinationLocation.setText(object.getString("name"));
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
+                        break;
+                    }
+                }
+                if(loc != null){
+                    updateFare();
+                }
+
+            }
+        });
+
 
 
         mView.mPackedFood.setOnClickListener(new View.OnClickListener() {
