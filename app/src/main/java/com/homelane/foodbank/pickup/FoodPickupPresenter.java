@@ -12,12 +12,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-<<<<<<< HEAD
-=======
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
->>>>>>> bfde266da9f15b60c02a0800a3c5937ec942f9da
-
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.hl.hlcorelib.orm.HLObject;
