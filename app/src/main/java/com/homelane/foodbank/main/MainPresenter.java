@@ -19,6 +19,7 @@ import com.hl.hlcorelib.utils.HLPreferenceUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
 import com.homelane.foodbank.loginsignup.LoginPresenter;
+import com.homelane.foodbank.pickup.FoodPickupPresenter;
 
 import java.util.List;
 
@@ -46,18 +47,24 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
     protected void onBindView() {
         super.onBindView();
         if(!isRecreated()) {
-
-            HLFragmentUtils.HLFragmentTransaction transaction =
-                    new HLFragmentUtils.HLFragmentTransaction();
-            transaction.isRoot = true;
-            transaction.mFrameId = R.id.fragment_frame;
-
-
-            transaction.mFragmentClass = LoginPresenter.class;
-            push(transaction);
+            final boolean mode = getIntent().getExtras().getBoolean("isExist");
+            if(mode){
+                showDropinFood();
+            }else{
+                final HLFragmentUtils.HLFragmentTransaction transaction =
+                        new HLFragmentUtils.HLFragmentTransaction();
+                transaction.isRoot = true;
+                transaction.mFrameId = R.id.fragment_frame;
+                transaction.mFragmentClass = LoginPresenter.class;
+                push(transaction);
+            }
         }
         if(! hasEventListener(Constants.ON_LOGOUT_EVENT, this))
             addEventListener(Constants.ON_LOGOUT_EVENT, this);
+
+        if(!hasEventListener(Constants.SHOW_DROP_IN_FOOD_EVENT, this)){
+            addEventListener(Constants.SHOW_DROP_IN_FOOD_EVENT, this);
+        }
     }
 
     /**
@@ -68,6 +75,7 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
     protected void onDestroyHLView() {
         super.onDestroyHLView();
         removeEventListener(Constants.ON_LOGOUT_EVENT, this);
+        removeEventListener(Constants.SHOW_DROP_IN_FOOD_EVENT, this);
     }
 
     /**
@@ -88,6 +96,20 @@ public class MainPresenter extends HLCoreActivityPresenter<MainView> implements 
 
             transaction.mFragmentClass = LoginPresenter.class;
             push(transaction);
+        }else{
+            showDropinFood();
         }
+    }
+
+    /**
+     * function launch the {@link FoodPickupPresenter}
+     */
+    private void showDropinFood(){
+        HLFragmentUtils.HLFragmentTransaction transaction =
+                new HLFragmentUtils.HLFragmentTransaction();
+        transaction.isRoot = true;
+        transaction.mFrameId = R.id.fragment_frame;
+        transaction.mFragmentClass = FoodPickupPresenter.class;
+        push(transaction);
     }
 }

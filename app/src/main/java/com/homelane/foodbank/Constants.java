@@ -17,6 +17,9 @@ public class Constants {
         public static final String PRODUCT_ID = "product_id";
     }
 
+
+    public static final String BACK_TO_DROP_FOOD = "BACK_TO_DROP_FOOD";
+
     public static final String URL = "url";
     public static final String NULL = "null";
 
@@ -61,7 +64,8 @@ public class Constants {
     public static final class TripStatus{
         public static final String PROCESSING = "processing";
         public static final String COMPLETED = "completed";
-        public static final String ACCEPTED = "acceted";
+        public static final String ACCEPTED = "accepted";
+        public static final String FAILED   = "failed";
 
     }
 
@@ -79,6 +83,7 @@ public class Constants {
     public static final String ON_UPDATE_USER_EVENT ="on_update_user";
     public static final String ON_FORGOT_PWD_EVENT ="on_forgot_password";
     public static final String ON_LOGOUT_EVENT ="on_logout_event";
+    public static final String SHOW_DROP_IN_FOOD_EVENT = "SHOW_DROP_IN_FOOD_EVENT";
 
 
 }

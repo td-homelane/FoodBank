@@ -52,7 +52,7 @@ public class SplashPresenter extends HLCoreActivityPresenter<SplashView> {
         String userID = HLPreferenceUtils.obtain().getString(HLConstants._ID);
         final Intent mainIntent = new Intent(SplashPresenter.this, MainPresenter.class);
 
-        if(userID != null){
+        if(userID.length() > 0){
             HLUser hlUser=new HLUser();
             hlUser.setmObjectId(userID);
             hlUser.fetch();

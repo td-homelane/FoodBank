@@ -25,6 +25,8 @@
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:name=".main.MainPresenter"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>

@@ -33,7 +33,7 @@
     <string name="current_location">Current location</string>
     <string name="pickup_txt">Pickup</string>
     <string name="destination_txt">Destination</string>
-    <string name="fare_estimate">Estiamted Fare</string>
+    <string name="fare_estimate">Estimated Fare</string>
     <string name="book_cab">Book</string>
     <string name="selected_type">Selected food type</string>
     <string name="raw_materials">Raw materials</string>

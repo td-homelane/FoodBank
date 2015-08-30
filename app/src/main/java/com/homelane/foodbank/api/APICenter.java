@@ -1,6 +1,7 @@
 package com.homelane.foodbank.api;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,6 +27,9 @@ public final class APICenter {
 
     private static RequestQueue mRequestQueue = Volley.newRequestQueue(HLCoreLib.getAppContext());
 
+
+
+
     /**
      * The interface talk to the app components
      */
@@ -39,16 +43,9 @@ public final class APICenter {
         /**
          * delegate method which will be called on completion of the request
          *
-         * @param results the result obtained from the server
+         * @param response the result obtained from the server
          */
-        public void onResult(List<HLObject> results);
-
-        /**
-         * delegate method which will be called on completion of the request
-         *
-         * @param object the result obtained from the server
-         */
-        public void onResult(HLObject object);
+        public void onResult(HLObject response);
     }
 
     /**
@@ -102,12 +99,16 @@ public final class APICenter {
                                 mTrip.put(Constants.Trip.STATUS, response.getString("status"));
                             }
                             mTrip.save();
-                            callback.onResult(mTrip);
+                            if(callback != null) {
+                                callback.onResult(mTrip);
+                            }
                         }
                     }catch (JSONException e){
-                        callback.onError(e);
+                        if(callback != null)
+                            callback.onError(e);
                     }catch (HLQuery.HLQueryException e){
-                        callback.onError(e);
+                        if(callback != null)
+                            callback.onError(e);
                     }
                 }
             }, new Response.ErrorListener() {
@@ -120,7 +121,8 @@ public final class APICenter {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     mRequestQueue.cancelAll(requestReceiptUrl);
-                    callback.onError(error);
+                    if(callback != null)
+                        callback.onError(error);
                 }
             }){
                 /**
@@ -156,17 +158,26 @@ public final class APICenter {
                                            final APIInterface callback){
         final String tripEstimateUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
                 "/v1/requests/estimate";
+        String[] latLon = mTrip.getString(Constants.Trip.PICKUP_LOCATION).split(",");
+        String startLat = latLon[0];
+        String startLon = latLon[1];
+
+        latLon = mTrip.getString(Constants.Trip.DISPATCH_LOCATION).split(",");
+
+        String endLat = latLon[0];
+        String endLon = latLon[1];
         try {
             JSONObject params = new JSONObject();
 
             String productId = HLCoreLib.readProperty(Constants.AppConfig.PRODUCT_ID);
-            params.put(Constants.APIParams.START_LATITUDE, "12.967061");
-            params.put(Constants.APIParams.START_LONGITUDE, "77.595482");
-            params.put(Constants.APIParams.END_LATITUDE, "12.908376");
-            params.put(Constants.APIParams.END_LONGITUDE, "77.647506");
+            params.put(Constants.APIParams.START_LATITUDE, startLat);
+            params.put(Constants.APIParams.START_LONGITUDE, startLon);
+            params.put(Constants.APIParams.END_LATITUDE, endLat);
+            params.put(Constants.APIParams.END_LONGITUDE,endLon);
             params.put(Constants.APIParams.PRODUCT_ID, productId);
 
-            JsonObjectRequest request = new JsonObjectRequest(tripEstimateUrl, params, new Response.Listener<JSONObject>() {
+            final JsonObjectRequest request = new JsonObjectRequest(tripEstimateUrl, params,
+                    new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -176,17 +187,12 @@ public final class APICenter {
                 public void onResponse(JSONObject response) {
                     mRequestQueue.cancelAll(tripEstimateUrl);
                     try {
-                        if (response != null && response.optString("request_id") != null) {
-                            mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
-                            if(response.optString("status") != null){
-                                mTrip.put(Constants.Trip.STATUS, response.getString("status"));
-                            }
-                            mTrip.save();
-                            callback.onResult(mTrip);
+                        if (response != null && response.optJSONObject("price") != null) {
+                            String value = response.getJSONObject("price").getString("display");
+                            mTrip.put(Constants.Trip.FARE, value);
                         }
+                        callback.onResult(mTrip);
                     }catch (JSONException e){
-                        callback.onError(e);
-                    }catch (HLQuery.HLQueryException e){
                         callback.onError(e);
                     }
                 }
@@ -239,7 +245,8 @@ public final class APICenter {
         final String requestMapUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL) +
                 "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID) + "/map";
         try {
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestMapUrl, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestMapUrl,
+                    new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -250,7 +257,6 @@ public final class APICenter {
                     mRequestQueue.cancelAll(requestMapUrl);
                     try {
                         if (response != null && response.optString("request_id") != null) {
-                            mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
                             if(response.optString("href") != null){
                                 mTrip.put(Constants.Trip.MAP_LINK, response.getString("href"));
                             }
@@ -313,7 +319,8 @@ public final class APICenter {
                 "/v1/requests/" + mTrip.getString(Constants.Trip.TRIP_ID);
 
         try {
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestStatusUrl, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, requestStatusUrl,
+                    new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -383,18 +390,27 @@ public final class APICenter {
                                            final APIInterface callback) {
         final String requestPickupUrl = HLCoreLib.readProperty(Constants.AppConfig.UBER_API_URL)
                 + "/v1/requests";
+        String[] latLon = mTrip.getString(Constants.Trip.PICKUP_LOCATION).split(",");
+        String startLat = latLon[0];
+        String startLon = latLon[1];
+
+        latLon = mTrip.getString(Constants.Trip.DISPATCH_LOCATION).split(",");
+
+        String endLat = latLon[0];
+        String endLon = latLon[1];
 
         try {
-            JSONObject params = new JSONObject();
+            final JSONObject params = new JSONObject();
 
             String productId = HLCoreLib.readProperty(Constants.AppConfig.PRODUCT_ID);
-            params.put(Constants.APIParams.START_LATITUDE, "12.967061");
-            params.put(Constants.APIParams.START_LONGITUDE, "77.595482");
-            params.put(Constants.APIParams.END_LATITUDE, "12.908376");
-            params.put(Constants.APIParams.END_LONGITUDE, "77.647506");
+            params.put(Constants.APIParams.START_LATITUDE, startLat);
+            params.put(Constants.APIParams.START_LONGITUDE,startLon);
+            params.put(Constants.APIParams.END_LATITUDE, endLat);
+            params.put(Constants.APIParams.END_LONGITUDE, endLon);
             params.put(Constants.APIParams.PRODUCT_ID, productId);
 
-            JsonObjectRequest request = new JsonObjectRequest(requestPickupUrl, params, new Response.Listener<JSONObject>() {
+            final JsonObjectRequest request = new JsonObjectRequest(requestPickupUrl, params,
+                    new Response.Listener<JSONObject>() {
                 /**
                  * Called when a response is received.
                  *
@@ -406,9 +422,6 @@ public final class APICenter {
                     try {
                         if (response != null && response.optString("request_id") != null) {
                             mTrip.put(Constants.Trip.TRIP_ID, response.getString("request_id"));
-                            if(response.optString("status") != null){
-                                mTrip.put(Constants.Trip.STATUS, response.getString("status"));
-                            }
                             mTrip.save();
                             callback.onResult(mTrip);
                         }
@@ -447,7 +460,16 @@ public final class APICenter {
                     return headers;
                 }
 
-                
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    final int code = response.statusCode;
+                    if(code == 202){
+                        mTrip.put(Constants.Trip.STATUS, Constants.TripStatus.COMPLETED);
+                    }else{
+                        mTrip.put(Constants.Trip.STATUS, Constants.TripStatus.FAILED);
+                    }
+                    return super.parseNetworkResponse(response);
+                }
             };
             request.setTag(requestPickupUrl);
             mRequestQueue.add(request);

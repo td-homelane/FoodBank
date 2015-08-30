@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
@@ -19,6 +20,7 @@ import com.hl.hlcorelib.orm.HLQuery;
 import com.hl.hlcorelib.utils.HLFragmentUtils;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
+import com.homelane.foodbank.api.APICenter;
 import com.homelane.foodbank.history.TripHistoryPresenter;
 import com.homelane.foodbank.utils.GPSUtils;
 
@@ -76,6 +78,8 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     protected void onBindView() {
         super.onBindView();
 
+
+
         mView.mPackedFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,9 +91,12 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                 for (HLObject object : collectionCenters) {
                     if (object.getString("processedFood").equals("true")) {
                         mView.mDestinationLocation.setText(object.getString("name"));
-                        destLocation = object.getString("latitude")+","+object.getString("longitude");
+                        destLocation = object.getString("latitude") + "," + object.getString("longitude");
                         break;
                     }
+                }
+                if(loc != null){
+                    updateFare();
                 }
             }
         });
@@ -109,15 +116,19 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                         break;
                     }
                 }
+                if(loc != null){
+                    updateFare();
+                }
             }
         });
 
         mView.mBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mView.mBookBtn.setText("Requesting.....");
+                mView.mBookBtn.setEnabled(false);
                 if(loc != null && destLocation != null) {
-                    HLObject trip = new HLObject(Constants.Trip.TRIP);
+                    final HLObject trip = new HLObject(Constants.Trip.TRIP);
                     trip.put(Constants.Trip.PICKUP_LOCATION, loc.getLatitude() + "," + loc.getLongitude());
                     trip.put(Constants.Trip.DISPATCH_LOCATION, destLocation);
                     trip.put(Constants.Trip.STATUS, Constants.NULL);
@@ -132,6 +143,78 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                             food.put(Constants.Trip.TRIP_ID, trip);
                             food.put(Constants.Food.CATEGORY, foodCategory);
                             food.save();
+
+                            APICenter.requestPickUp(trip, new APICenter.APIInterface() {
+                                /**
+                                 * delegate method which will be called on completion of the request
+                                 *
+                                 * @param response the result obtained from the server
+                                 */
+                                @Override
+                                public void onResult(HLObject response) {
+                                    if(response.getString(Constants.Trip.STATUS).
+                                            equals(Constants.TripStatus.COMPLETED)){
+                                        APICenter.getRequestMap(response, new APICenter.APIInterface() {
+                                            /**
+                                             * delegate method which will be called on completion of the request
+                                             *
+                                             * @param response the result obtained from the server
+                                             */
+                                            @Override
+                                            public void onResult(HLObject response) {
+                                                obtainReceipt(response);
+                                                HLFragmentUtils.HLFragmentTransaction transaction =
+                                                        new HLFragmentUtils.HLFragmentTransaction();
+                                                final Bundle data = new Bundle();
+                                                transaction.isRoot = true;
+                                                data.putString(Constants.URL, response.getString(Constants.Trip.MAP_LINK));
+                                                data.putBoolean(Constants.BACK_TO_DROP_FOOD, true);
+                                                transaction.mFragmentClass = MapViewPresenter.class;
+                                                transaction.mFrameId = R.id.fragment_frame;
+                                                transaction.mParameters = data;
+                                                push(transaction);
+                                            }
+
+                                            /**
+                                             * function which will be called on error
+                                             *
+                                             * @param e the exception thrown
+                                             */
+                                            @Override
+                                            public void onError(Exception e) {
+
+                                            }
+                                        });
+                                    }else{
+                                        try {
+                                            response.delete();
+                                            showToast("Unable to find the drivers nearby");
+
+                                            mView.mBookBtn.setText("Retry");
+                                            mView.mBookBtn.setEnabled(true);
+                                        }catch (HLObject.HLDeleteException e){
+
+                                        }
+                                    }
+                                }
+
+                                /**
+                                 * function which will be called on error
+                                 *
+                                 * @param e the exception thrown
+                                 */
+                                @Override
+                                public void onError(Exception e) {
+                                    showToast("Failed to place the request, make sure you have a network connection");
+                                    try {
+                                        trip.delete();
+                                        mView.mBookBtn.setText("Retry");
+                                        mView.mBookBtn.setEnabled(true);
+                                    }catch (HLObject.HLDeleteException ex){
+                                        Log.d("hello", "hello");
+                                    }
+                                }
+                            });
 
                         }
                     } catch (HLQuery.HLQueryException e) {
@@ -164,6 +247,10 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
                         loc = mGPSTracker.getLocation();
                         mView.mCuurentLocation.setText(getAddressByGpsCoordinates(loc.getLatitude() + "",
                                 loc.getLongitude() + ""));
+                        if(destLocation != null){
+                            updateFare();
+                        }
+                        updateFare();
                         locHandler.removeCallbacks(this);
                     }else
                         locHandler.postDelayed(this,2000);
@@ -175,6 +262,45 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
     }
 
     Handler locHandler = new Handler();
+
+    /**
+     * function get the receipt from server and update it
+     *
+     * @param trip the trip against which the receipt should be obtained
+     */
+    private void obtainReceipt(final HLObject trip){
+        APICenter.getRequestReceipt(trip, null);
+    }
+
+    /**
+     * function which updates the fare for the trip
+     */
+    private void updateFare(){
+        HLObject trip = new HLObject(Constants.Trip.TRIP);
+        trip.put(Constants.Trip.PICKUP_LOCATION, loc.getLatitude() + "," + loc.getLongitude());
+        trip.put(Constants.Trip.DISPATCH_LOCATION, destLocation);
+        APICenter.getRequestEstimate(trip, new APICenter.APIInterface() {
+            /**
+             * function which will be called on error
+             *
+             * @param e the exception thrown
+             */
+            @Override
+            public void onError(Exception e) {
+                showToast("Failed to populate the estimate!!!");
+            }
+
+            /**
+             * delegate method which will be called on completion of the request
+             *
+             * @param response the result obtained from the server
+             */
+            @Override
+            public void onResult(HLObject response) {
+                mView.mFareEstimate.setText(response.getString(Constants.Trip.FARE));
+            }
+        });
+    }
 
     /**
      * Called when the fragment is visible to the user and actively running.

@@ -132,6 +132,7 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
             HLFragmentUtils.HLFragmentTransaction transaction =
                     new HLFragmentUtils.HLFragmentTransaction();
             transaction.mFrameId = R.id.fragment_frame;
+            transaction.isRoot = true;
             transaction.mFragmentClass = FoodPickupPresenter.class;
             push(transaction);
 
@@ -151,9 +152,11 @@ public class LoginPresenter extends HLCoreFragment<LoginView> implements HLLoade
                     forgotPasswordDialog.dismiss();
                 }
 
-                mUser.notifyUser(getActivity(), mUser, getString(R.string.pincode_msg_format) + " ");
+                mUser.notifyUser(getActivity(), mUser,
+                        getString(R.string.pincode_msg_format) + " ");
             }else
-                Toast.makeText(getActivity(), "Incorrect email or mobile number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Incorrect email or mobile number",
+                        Toast.LENGTH_SHORT).show();
 
         }
     }
