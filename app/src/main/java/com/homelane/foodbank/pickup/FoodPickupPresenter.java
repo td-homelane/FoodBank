@@ -513,7 +513,7 @@ public class FoodPickupPresenter extends HLCoreFragment<FoodPickupView> {
             @Override
             protected void onPostExecute(String s) {
                 str = s;
-                if(mView.mCuurentLocation != null)
+                if(isVisible() && mView.mCuurentLocation != null)
                     mView.mCuurentLocation.setText(s);
             }
         }.execute(Latitude, longitude);

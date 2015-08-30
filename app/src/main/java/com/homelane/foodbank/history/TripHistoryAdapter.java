@@ -1,5 +1,6 @@
 package com.homelane.foodbank.history;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hl.hlcorelib.mvp.events.HLCoreEvent;
+import com.hl.hlcorelib.mvp.events.HLEventDispatcher;
 import com.hl.hlcorelib.orm.HLObject;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
@@ -82,15 +85,25 @@ public class TripHistoryAdapter extends RecyclerView.Adapter<TripHistoryAdapter.
 
         if(foodObjects.size() > 0) {
             HLObject foodObject = foodObjects.get(0);
-
             holder.mFoodType.setText(foodObject.getString(Constants.Food.CATEGORY));
-
         }
         holder.mDeliveryStatus.setText(tripObj.getString(Constants.Trip.STATUS));
         holder.mTripDate.setText(tripObj.getmCreatedTime()+"");
         holder.mTripFare.setText(tripObj.getString(Constants.Trip.FARE));
-
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Called when a view has been clicked.
+             *
+             * @param v The view that was clicked.
+             */
+            @Override
+            public void onClick(View v) {
+                final Bundle data = new Bundle();
+                data.putInt(Constants.Trip.TRIP_ID, position);
+                final HLCoreEvent event = new HLCoreEvent(Constants.ON_HISTORY_ITEM_CLICK, data);
+                HLEventDispatcher.acquire().dispatchEvent(event);
+            }
+        });
     }
 
     /**
