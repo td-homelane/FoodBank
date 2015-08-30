@@ -37,6 +37,7 @@ import com.hl.hlcorelib.db.HLCoreDatabase;
 import com.hl.hlcorelib.utils.HLPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -592,8 +593,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
             ContentValues cv = new ContentValues();
             try {
                 if (!mIsSynced) {
-                    mCreatedTime = System.currentTimeMillis();
-                    mUpdatedTime = System.currentTimeMillis();
+                    mCreatedTime = new Date().getTime();
+                    mUpdatedTime = new Date().getTime();
                     mObjectId = Long.toHexString(System.nanoTime());
                     cv.put(HLConstants._ID, mObjectId);
                     cv = setMapValues(cv);
@@ -604,7 +605,7 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
                     mIsDirty = !mIsSynced;
                     return mIsSynced;
                 } else {
-                    mUpdatedTime = System.currentTimeMillis();
+                    mUpdatedTime = new Date().getTime();
                     cv = setMapValues(cv);
                     cv.put(HLConstants._updatedAt, mUpdatedTime);
                     cv = overrideColumValues(cv);
