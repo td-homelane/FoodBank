@@ -1,7 +1,5 @@
 package com.homelane.foodbank.pickup;
 
-import android.view.View;
-
 import com.hl.hlcorelib.mvp.events.HLCoreEvent;
 import com.hl.hlcorelib.mvp.presenters.HLCoreFragment;
 import com.homelane.foodbank.Constants;
