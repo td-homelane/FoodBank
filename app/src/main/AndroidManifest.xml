@@ -28,6 +28,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize"
             android:name=".main.MainPresenter"
+            android:theme="@style/AppTheme"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
 

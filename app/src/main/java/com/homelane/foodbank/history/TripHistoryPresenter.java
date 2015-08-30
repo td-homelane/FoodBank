@@ -12,6 +12,7 @@ import com.hl.hlcorelib.orm.HLObject;
 import com.hl.hlcorelib.orm.HLQuery;
 import com.homelane.foodbank.Constants;
 import com.homelane.foodbank.R;
+import com.homelane.foodbank.main.MainPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,12 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
     @Override
     protected void onBindView() {
         super.onBindView();
+
+//        getActivity().getActionBar().setTitle("Your Sharing... ");
+        ((MainPresenter)getActivity()).getSupportActionBar().setTitle("Your Sharing... ");
+        ((MainPresenter)getActivity()).getSupportActionBar().setWindowTitle("Your Sharing... ");
+        ((MainPresenter)getActivity()).setTitle("Your Sharing... ");
+//        getActivity().getWindow().setTitle("Your Sharing... ");
 
         mAdapter = new TripHistoryAdapter(new ArrayList<HLObject>(), this);
         mView.mTripHistoryList.setAdapter(mAdapter);
@@ -99,7 +106,7 @@ public class TripHistoryPresenter extends HLCoreFragment<TripHistoryView> implem
     public void onLoad(List<HLObject> list) {
         if(list != null && list.size() > 0){
             mAdapter.setmDataProvider((ArrayList<HLObject>)list);
-            mView.mTripHistoryList.swapAdapter(mAdapter, false);
+            mView.mTripHistoryList.swapAdapter(mAdapter, true);
         }
     }
 

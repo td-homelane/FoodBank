@@ -148,6 +148,10 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
      */
     protected long mUpdatedTime;
 
+    public Date getmCreatedTime() {
+        return new Date(mCreatedTime);
+    }
+
     /**
      * Function set the unique key map, this further calls {@link #put(String, String)}
      * @param isUnique decides the key is unique or not

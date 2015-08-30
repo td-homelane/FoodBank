@@ -76,18 +76,19 @@ public class TripHistoryAdapter extends RecyclerView.Adapter<TripHistoryAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final int pos = position;
-        HLObject history = mDataProvider.get(position);
+        HLObject tripObj = mDataProvider.get(position);
 
-        ArrayList<HLObject> tripObjects= (ArrayList)history.getList(Constants.Trip.TRIP_ID);
+        ArrayList<HLObject> foodObjects= (ArrayList)tripObj.getList(Constants.Trip.TRIP_ID);
 
-        if(tripObjects.size() > 0) {
-            HLObject tripObject = tripObjects.get(0);
-            holder.mDeliveryStatus.setText(tripObject.getString(Constants.Trip.STATUS));
+        if(foodObjects.size() > 0) {
+            HLObject foodObject = foodObjects.get(0);
+
+            holder.mFoodType.setText(foodObject.getString(Constants.Food.CATEGORY));
+
         }
-
-        holder.mTripDate.setText(history.getString(Constants.Trip.START_TIME));
-        holder.mFoodType.setText(history.getString(Constants.Food.CATEGORY));
-        holder.mTripFare.setText(history.getString(Constants.Trip.FARE));
+        holder.mDeliveryStatus.setText(tripObj.getString(Constants.Trip.STATUS));
+        holder.mTripDate.setText(tripObj.getmCreatedTime()+"");
+        holder.mTripFare.setText(tripObj.getString(Constants.Trip.FARE));
 
 
     }

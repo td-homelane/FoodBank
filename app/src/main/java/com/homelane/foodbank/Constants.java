@@ -50,7 +50,7 @@ public class Constants {
 
     public static final class Trip {
         public static final String TRIP = "trip";
-        public static final String TRIP_ID = "trip_id";
+        public static final String TRIP_ID = "tripId";
         public static final String PICKUP_LOCATION = "pickup_location";
         public static final String DISPATCH_LOCATION = "dispatch_location";
         public static final String STATUS = "status";
