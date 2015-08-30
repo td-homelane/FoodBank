@@ -597,8 +597,8 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
             ContentValues cv = new ContentValues();
             try {
                 if (!mIsSynced) {
-                    mCreatedTime = System.currentTimeMillis();
-                    mUpdatedTime = System.currentTimeMillis();
+                    mCreatedTime = new Date().getTime();
+                    mUpdatedTime = new Date().getTime();
                     mObjectId = Long.toHexString(System.nanoTime());
                     cv.put(HLConstants._ID, mObjectId);
                     cv = setMapValues(cv);
@@ -609,7 +609,7 @@ public class HLObject implements HLPrimitiveGetSetInterface, Parcelable{
                     mIsDirty = !mIsSynced;
                     return mIsSynced;
                 } else {
-                    mUpdatedTime = System.currentTimeMillis();
+                    mUpdatedTime = new Date().getTime();
                     cv = setMapValues(cv);
                     cv.put(HLConstants._updatedAt, mUpdatedTime);
                     cv = overrideColumValues(cv);

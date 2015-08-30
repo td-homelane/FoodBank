@@ -19,12 +19,24 @@
 ~  THE SOFTWARE.
 ~
 -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:id="@+id/splash_image_view"
-    android:gravity="center"
-    android:layout_height="match_parent"
-    android:text="This is the splash screen"
-    >
 
-</TextView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_480x640"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash_image"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/splash_image_view"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:text="This is the splash screen"
+        />
+</RelativeLayout>

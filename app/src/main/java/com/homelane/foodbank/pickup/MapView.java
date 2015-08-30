@@ -1,6 +1,7 @@
 package com.homelane.foodbank.pickup;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -114,9 +115,26 @@ public class MapView implements HLView {
              */
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return true;
+            }
+
+
+            /**
+             * Notify the host application that a page has started loading. This method
+             * is called once for each main frame load so a page with iframes or
+             * framesets will call onPageStarted one time for the main frame. This also
+             * means that onPageStarted will not be called when the contents of an
+             * embedded frame changes, i.e. clicking a link whose target is an iframe.
+             *
+             * @param view    The WebView that is initiating the callback.
+             * @param url     The url to be loaded.
+             * @param favicon The favicon for this page if it already exists in the
+             */
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 mView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 mView.findViewById(R.id.web_view).setVisibility(View.GONE);
-                return true;
+                super.onPageStarted(view, url, favicon);
             }
         });
         webView.loadUrl(url);
